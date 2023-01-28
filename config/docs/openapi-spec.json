@@ -1,0 +1,961 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Customer Product",
+    "description": "Esta API permite consultar productos de los clientes DEX.",
+    "version": "1.0.0",
+    "x-audience": "internal"
+  },
+  "servers": [
+    {
+      "url": "http://cia-reqresp-alicorp-customerproducts.cia.dev.knative.api-alicorp.com/v1/customer-products"
+    }
+  ],
+  "paths": {
+    "/{customerCode}": {
+      "get": {
+        "operationId": "getCustomerProducts",
+        "tags": [
+          "Customer Products"
+        ],
+        "summary": "Listar products del cliente",
+        "description": "Esta operación permite buscar, mediante filtros, los productos de los clientes DEX.",
+        "parameters": [
+          {
+            "name": "Request-Id",
+            "in": "header",
+            "example": "d330baf9440d22fb7bc3ba1b2e841abc",
+            "description": "Identificador único del request utilizado para fines de trazabilidad.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
+          {
+            "name": "Application-Code",
+            "in": "header",
+            "example": "Alimarket",
+            "description": "Identificador único de la aplicación consumidora.",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "customerCode",
+            "in": "path",
+            "example": 132256,
+            "description": "Código del cliente del cual se quieren obtener los productos.",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "salesOrganization",
+            "in": "query",
+            "example": "DEX",
+            "description": "Organizacion de ventas, para las consultas Dex enviar DEX.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "distributorCode",
+            "in": "query",
+            "example": 801,
+            "description": "Código de sociedad.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "branchCode",
+            "in": "query",
+            "example": "0048",
+            "description": "Código de sede.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "platformCode",
+            "in": "query",
+            "example": 10,
+            "description": "Código de plataforma.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "subplatformCode",
+            "in": "query",
+            "example": 1,
+            "description": "Código de subplataforma.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryCode",
+            "in": "query",
+            "example": "001,008",
+            "description": "Códigos de categoría separados por coma.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "familyCode",
+            "in": "query",
+            "example": "047,002",
+            "description": "Códigos de familia separados por coma.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "varietyCode",
+            "in": "query",
+            "example": 10,
+            "description": "Código de variedad.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "presentationCode",
+            "in": "query",
+            "example": 12,
+            "description": "Código de presentación.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "brandCode",
+            "in": "query",
+            "example": "024,001",
+            "description": "Códigos de marca separados por coma.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemCode",
+            "in": "query",
+            "example": "3003007,3508",
+            "description": "Código del producto. Se puede enviar una lista de códigos separados por coma.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "example": 1,
+            "description": "Paginación. Permite obtener una página específica en una consulta paginada.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Paginación. Indica el número de registros que se pueden obtener por página, 1...100",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerProductsWithHierarchyDex"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suggested-products": {
+      "get": {
+        "operationId": "getSuggestedProducts",
+        "tags": [
+          "Customer Suggested Products"
+        ],
+        "summary": "Obtiene los productos sugierdos de clientes",
+        "description": "Esta operación permite listar los productos sugeridos de uno o más clientes DEX.",
+        "parameters": [
+          {
+            "name": "Request-Id",
+            "in": "header",
+            "example": "d330baf9440d22fb7bc3ba1b2e841abc",
+            "description": "Identificador único del request utilizado para fines de trazabilidad.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
+          {
+            "name": "Application-Code",
+            "in": "header",
+            "example": "Alimarket",
+            "description": "Identificador único de la aplicación consumidora.",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "customerCode",
+            "in": "query",
+            "description": "Lista de uno o más códigos de clientes separados por comas (10 como maximo).",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "salespersonCode",
+            "in": "query",
+            "description": "Código del vendedor.",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuggestedProductsByCustomerCodes"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ideal-assortments": {
+      "get": {
+        "operationId": "getCustomerIdealAssortments",
+        "tags": [
+          "Customer Ideal Assortment"
+        ],
+        "summary": "Obtiene el surtido ideal de productos",
+        "description": "Esta operación permite listar los productos del surtido ideal de uno o más clientes DEX.",
+        "parameters": [
+          {
+            "name": "Request-Id",
+            "in": "header",
+            "example": "d330baf9440d22fb7bc3ba1b2e841abc",
+            "description": "Identificador único del request utilizado para fines de trazabilidad.",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
+          {
+            "name": "Application-Code",
+            "in": "header",
+            "example": "Alimarket",
+            "description": "Identificador único de la aplicación consumidora.",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "customerCode",
+            "in": "query",
+            "example": "0000012002,0000012003",
+            "description": "Lista de códigos de clientes separados por comas (10 como maximo).",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "salespersonCode",
+            "in": "query",
+            "example": "0000004391",
+            "description": "Código del vendedor.",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdealAssortmentsByCustomerCodes"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CustomerProductWithHierarchyDex": {
+        "description": "Detalles de Producto con jerarquia dex",
+        "type": "object",
+        "properties": {
+          "itemCode": {
+            "type": "string",
+            "example": "000000000004302057",
+            "description": "SKU del producto."
+          },
+          "itemStatusCode": {
+            "type": "string",
+            "example": "03",
+            "description": "Estado del producto."
+          },
+          "itemReplacementCode": {
+            "type": "string",
+            "example": "",
+            "description": "Código de reemplazo del producto."
+          },
+          "itemTypeCode": {
+            "type": "string",
+            "example": "FERT",
+            "description": "Código del tipo de producto."
+          },
+          "regimeCode": {
+            "type": "string",
+            "description": "Código de régimen del producto. Si es diferente de vacío es afecto a IGV.",
+            "example": "010"
+          },
+          "weightUnit": {
+            "type": "string",
+            "description": "Unidad de peso del producto.",
+            "example": "KG"
+          },
+          "netWeight": {
+            "type": "number",
+            "description": "Peso neto del producto",
+            "example": 10
+          },
+          "dexMinSaleQuantity": {
+            "type": "number",
+            "example": 1,
+            "description": "Cantidad mínima para venta (DEX)."
+          },
+          "listPrice": {
+            "$ref": "#/components/schemas/ListPrice"
+          },
+          "itemDescription": {
+            "$ref": "#/components/schemas/ItemDescription"
+          },
+          "saleUnitMeasure": {
+            "$ref": "#/components/schemas/MeasureUnit"
+          },
+          "baseUnitMeasure": {
+            "$ref": "#/components/schemas/MeasureUnit"
+          },
+          "itemCommercialAssets": {
+            "type": "array",
+            "description": "Lista de activos comerciales",
+            "items": {
+              "$ref": "#/components/schemas/ItemCommercialAsset"
+            }
+          },
+          "itemProductHierarchyDex": {
+            "$ref": "#/components/schemas/ItemProductHierarchyDex"
+          }
+        }
+      },
+      "CustomerProductsWithHierarchyDex": {
+        "type": "array",
+        "description": "Lista de productos.",
+        "items": {
+          "$ref": "#/components/schemas/CustomerProductWithHierarchyDex"
+        }
+      },
+      "ListPrice": {
+        "type": "object",
+        "description": "Lista de precios",
+        "properties": {
+          "baseUnitAmount": {
+            "type": "number",
+            "description": "Precio base del material.",
+            "format": "double",
+            "example": 102.5
+          },
+          "saleUnitAmount": {
+            "type": "number",
+            "description": "Precio de venta del producto.",
+            "format": "double",
+            "example": 101.3
+          },
+          "perceptionInclBaseUnitAmount": {
+            "type": "number",
+            "description": "Precio base del producto con percepción.",
+            "format": "double",
+            "example": 105.2
+          },
+          "perceptionInclSaleUnitAmount": {
+            "type": "number",
+            "description": "Precio de venta del producto con percepción.",
+            "format": "double",
+            "example": 100.2
+          },
+          "perceptionFactor": {
+            "type": "number",
+            "description": "Factor de la percepción.",
+            "format": "double",
+            "example": 0.2
+          },
+          "currency": {
+            "type": "string",
+            "description": "Nombre de la moneda en la que estan los precios.",
+            "example": "PEN"
+          },
+          "taxRate": {
+            "type": "number",
+            "description": "Tasa de impuesto al valor agregado. (IVA, IGV)",
+            "format": "double",
+            "example": 0.18
+          }
+        }
+      },
+      "ItemDescription": {
+        "title": "Descripción del producto.",
+        "type": "object",
+        "properties": {
+          "itemCode": {
+            "type": "string",
+            "description": "SKU del producto.",
+            "example": "000000000004302057"
+          },
+          "langCode": {
+            "type": "string",
+            "description": "Código del lenguaje de la descripción del producto.",
+            "example": "S"
+          },
+          "itemName": {
+            "type": "string",
+            "description": "Nombre del producto.",
+            "example": "PASTA. DON VITT TORN. 250GR 20BOL"
+          },
+          "commercialName": {
+            "type": "string",
+            "description": "Nombre comercial del producto.",
+            "example": "HARINA BLANCA FLOR PREPARADA 1KG"
+          },
+          "commercialKeywords": {
+            "type": "string",
+            "description": "Lista de keywords para el producto.",
+            "example": "Harina, postre, vlanca, blancaflor"
+          },
+          "commercialBenefits": {
+            "type": "string",
+            "description": "Beneficios del producto.",
+            "example": "Postres riquísimos con la mejora harina para repostería"
+          },
+          "commercialDescription": {
+            "type": "string",
+            "description": "Descripción del producto.",
+            "example": "Postres riquísimos con la mejora harina para repostería"
+          }
+        },
+        "description": "Información detallada del producto."
+      },
+      "Item": {
+        "type": "object",
+        "description": "Descripción de producto",
+        "properties": {
+          "itemCode": {
+            "type": "string",
+            "example": "000000000004302057",
+            "description": "SKU del producto."
+          },
+          "itemStatusCode": {
+            "type": "string",
+            "example": "03",
+            "description": "Estado del producto."
+          },
+          "itemReplacementCode": {
+            "type": "string",
+            "example": "",
+            "description": "Código de reemplazo del producto."
+          },
+          "itemTypeCode": {
+            "type": "string",
+            "example": "FERT",
+            "description": "Código del tipo de producto."
+          },
+          "dexMinSaleQuantity": {
+            "type": "number",
+            "example": 1,
+            "description": "Cantidad mínima para venta (DEX)."
+          },
+          "itemDescription": {
+            "$ref": "#/components/schemas/ItemDescription"
+          },
+          "itemCommercialAssets": {
+            "type": "array",
+            "description": "Lista de activos comerciales",
+            "items": {
+              "$ref": "#/components/schemas/ItemCommercialAsset"
+            }
+          }
+        }
+      },
+      "ItemCommercialAsset": {
+        "type": "object",
+        "description": "Activo comercial",
+        "properties": {
+          "assetCode": {
+            "type": "string",
+            "description": "Código del recurso",
+            "example": "101733"
+          },
+          "langCode": {
+            "type": "string",
+            "description": "Idioma del recurso",
+            "example": "S"
+          },
+          "itemCode": {
+            "type": "string",
+            "description": "Código del producto",
+            "example": "3003007"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nombre de archivo",
+            "example": "3501018_1.jpg"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo de archivo",
+            "example": "Image"
+          },
+          "size": {
+            "type": "string",
+            "description": "Peso de archivo",
+            "example": "131430"
+          },
+          "extension": {
+            "type": "string",
+            "description": "Extensión de archivo",
+            "example": "jpg"
+          },
+          "url": {
+            "type": "string",
+            "description": "Url de archivo",
+            "example": "https://saairflowprdfiles.blob.core.windows.net/stiboassets/3501018/20220621230816iaiywamg.jpg"
+          },
+          "label": {
+            "type": "string",
+            "description": "Descripción de archivo",
+            "example": "ProductImage"
+          },
+          "format": {
+            "type": "string",
+            "description": "Formato del recurso",
+            "example": "JPEG (Joint Photographic Experts Group JFIF image)"
+          }
+        }
+      },
+      "ItemProductHierarchyDex": {
+        "type": "object",
+        "properties": {
+          "categoryCode": {
+            "type": "string",
+            "description": "Código de la categoria.",
+            "example": 2
+          },
+          "category": {
+            "type": "string",
+            "description": "Descripción de la categoria",
+            "example": "FRIOL GRANEL PG"
+          },
+          "familyCode": {
+            "type": "string",
+            "description": "Código de la familia.",
+            "example": 236
+          },
+          "family": {
+            "type": "string",
+            "description": "Descripción de la familia.",
+            "example": 8
+          },
+          "brandCode": {
+            "type": "string",
+            "description": "Código de la marca.",
+            "example": "FRI"
+          },
+          "brand": {
+            "type": "string",
+            "description": "Descripción de la marca",
+            "example": 3006009
+          }
+        }
+      },
+      "MeasureUnit": {
+        "description": "Unidad de medida de base o venta",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Código de unidad de medida.",
+            "example": "ROL"
+          },
+          "shortDescription": {
+            "type": "string",
+            "description": "Descripción corta de unidad de medida.",
+            "example": "Unidad"
+          },
+          "longDescription": {
+            "type": "string",
+            "description": "Descripción larga de unidad de medida.",
+            "example": "Unidad"
+          },
+          "measureUnitType": {
+            "type": "string",
+            "description": "Tipo de unidad de medida",
+            "example": "UMV"
+          },
+          "conversionFactor": {
+            "type": "number",
+            "example": 20,
+            "description": "Factor de conversión."
+          }
+        }
+      },
+      "ItemWithItemProductHierarchyDex": {
+        "type": "object",
+        "properties": {
+          "itemCode": {
+            "type": "string",
+            "example": "000000000004302057",
+            "description": "SKU del producto."
+          },
+          "itemStatusCode": {
+            "type": "string",
+            "example": "03",
+            "description": "Estado del producto."
+          },
+          "itemReplacementCode": {
+            "type": "string",
+            "example": "",
+            "description": "Código de reemplazo del producto."
+          },
+          "itemTypeCode": {
+            "type": "string",
+            "example": "FERT",
+            "description": "Código del tipo de producto."
+          },
+          "dexMinSaleQuantity": {
+            "type": "number",
+            "example": 1,
+            "description": "Cantidad mínima para venta (DEX)."
+          },
+          "itemProductHierarchyDex": {
+            "$ref": "#/components/schemas/ItemProductHierarchyDex"
+          },
+          "listPrice": {
+            "$ref": "#/components/schemas/ListPrice"
+          },
+          "itemDescription": {
+            "$ref": "#/components/schemas/ItemDescription"
+          },
+          "itemCommercialAssets": {
+            "type": "array",
+            "description": "Lista de activos comerciales",
+            "items": {
+              "$ref": "#/components/schemas/ItemCommercialAsset"
+            }
+          }
+        }
+      },
+      "SuggestedProduct": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "$ref": "#/components/schemas/ItemWithItemProductHierarchyDex"
+          },
+          "productSegmentationType": {
+            "type": "string",
+            "example": "I",
+            "description": "Valor que indica si el producto es un potenciador (P) o imperdonable (I)."
+          },
+          "productRank": {
+            "type": "integer",
+            "example": 1,
+            "description": "Valor que indica el ranking o posición en el que se debe mostrar en el canal."
+          }
+        }
+      },
+      "SuggestedProducts": {
+        "type": "array",
+        "description": "Lista de productos sugeridos.",
+        "items": {
+          "$ref": "#/components/schemas/SuggestedProduct"
+        }
+      },
+      "SuggestedProductsByCustomerCode": {
+        "type": "object",
+        "properties": {
+          "customerCode": {
+            "type": "string",
+            "description": "Código del cliente.",
+            "example": 1000092
+          },
+          "suggestedProducts": {
+            "$ref": "#/components/schemas/SuggestedProducts"
+          }
+        }
+      },
+      "SuggestedProductsByCustomerCodes": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/SuggestedProductsByCustomerCode"
+        }
+      },
+      "IdealAssortment": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Item"
+          }
+        ],
+        "type": "object",
+        "description": "Surtido ideal",
+        "properties": {
+          "customerCode": {
+            "type": "string",
+            "example": "0001127854",
+            "description": "Código de cliente."
+          },
+          "productRank": {
+            "type": "integer",
+            "example": 1,
+            "description": "Valor que indica el ranking o posición en el que se debe mostrar en el canal."
+          },
+          "productClassification": {
+            "type": "string",
+            "example": "T",
+            "description": "Valor que indica si el producto es definido como uno TOP o REGULAR. T -> top, R -> Regular."
+          },
+          "salesIndicator": {
+            "type": "string",
+            "example": "NV",
+            "description": "Valor que indica si el producto ha sido comprado o no en los ultimos meses. V -> Vendido, NV -> No vendido."
+          }
+        }
+      },
+      "IdealAssortments": {
+        "type": "array",
+        "description": "Lista de surtidos ideales.",
+        "items": {
+          "$ref": "#/components/schemas/IdealAssortment"
+        }
+      },
+      "IdealAssortmentsByCustomerCode": {
+        "description": "Surtidos ideales con código de cliente",
+        "type": "object",
+        "properties": {
+          "customerCode": {
+            "type": "string",
+            "description": "Código del cliente.",
+            "example": 1000092
+          },
+          "idealAssortments": {
+            "$ref": "#/components/schemas/IdealAssortments"
+          }
+        }
+      },
+      "IdealAssortmentsByCustomerCodes": {
+        "description": "Lista de surtidos ideales con códigos de clientes",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/IdealAssortmentsByCustomerCode"
+        }
+      },
+      "UnexpectedError": {
+        "type": "object",
+        "description": "Object of response error",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "custom code of response",
+            "example": "INTERNAL_SERVER_ERROR"
+          },
+          "message": {
+            "type": "string",
+            "description": "message of response",
+            "example": "An internal server error has occurred."
+          }
+        }
+      },
+      "BadRequest": {
+        "type": "object",
+        "description": "Object of response error",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "custom code of response",
+            "example": "BAD_REQUEST"
+          },
+          "message": {
+            "type": "string",
+            "description": "message of response",
+            "example": "Request is not well-formed, syntactically incorrect, or violates schema."
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntityDetail"
+            }
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "type": "object",
+        "description": "Object of response error",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "custom code of response",
+            "example": "UNPROCESSABLE_ENTITY"
+          },
+          "message": {
+            "type": "string",
+            "description": "message of response",
+            "example": "The requested action could not be performed, semantically incorrect, or failed business validation."
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntityDetail"
+            }
+          }
+        }
+      },
+      "EntityDetail": {
+        "type": "object",
+        "description": "Object of response error",
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "field with error",
+            "example": "distributorCode"
+          },
+          "issue": {
+            "type": "string",
+            "description": "custom code of response",
+            "example": "MISSING_REQUIRED_PARAMETER"
+          },
+          "description": {
+            "type": "string",
+            "description": "error details of field",
+            "example": "cant not be empty"
+          }
+        }
+      }
+    }
+  }
+}

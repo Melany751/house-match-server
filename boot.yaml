@@ -1,0 +1,19 @@
+app:
+  appName: "house-match-users"
+  #description: ""
+  keywords: [ "user", "golang" ]
+  maintainers: [ "arthur", "melany" ]
+gin:
+  - name: users
+    port: 8080
+    enabled: true
+    commonService:
+      enabled: true
+    sw:
+      enabled: true
+    docs:
+      enabled: true
+      jsonPath: config/docs
+    middleware:
+      logging:
+        enabled: true
