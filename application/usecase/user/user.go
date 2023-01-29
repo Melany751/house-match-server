@@ -16,10 +16,19 @@ func New(storage user.Storage) User {
 }
 
 func (u User) GetById(id uuid.UUID) (*model.User, error) {
-	user, err := u.storage.GetById(id)
+	user, err := u.storage.GetStorageById(id)
 	if err != nil {
 		return nil, fmt.Errorf("user.storage.GetById(): %w", err)
 	}
 
 	return user, nil
+}
+
+func (u User) GetAll() (model.Users, error) {
+	users, err := u.storage.GetStorageAll()
+	if err != nil {
+		return nil, fmt.Errorf("user.storage.GetAll(): %w", err)
+	}
+
+	return users, nil
 }

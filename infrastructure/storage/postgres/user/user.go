@@ -2,14 +2,14 @@ package user
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/Melany751/house-match-server/domain/model"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4"
 )
 
 var (
-	_psqlGetById = `select * from domain.users where id = $1 `
+	_psqlGetById = `select * from domain.users where id = $1`
+	_psqlGetAll  = `select * from domain.users`
 )
 
 type User struct {
@@ -20,47 +20,63 @@ func New(db *sql.DB) User {
 	return User{db}
 }
 
-func (u User) GetById(id uuid.UUID) (*model.User, error) {
-	query := _psqlGetById
+func (u User) GetStorageById(id uuid.UUID) (*model.User, error) {
+	args := []any{id}
 
-	fmt.Println("################")
-	fmt.Println("query: ", query)
-	var m model.User
-
-	err := u.db.QueryRow(query, id).Scan(&m.ID, &m.User, &m.Password, &m.Email, &m.Theme)
+	stmt, err := u.db.Prepare(_psqlGetById)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	//defer stmt.Close()
-	//
-	//m, err := u.scanRow(stmt.QueryRow())
-	//if err != nil {
-	//	return nil, err
-	//}
+	defer stmt.Close()
 
-	fmt.Println("model: ", m)
-	fmt.Println("model: ", &m)
+	m, err := u.scanRow(stmt.QueryRow(args...))
+	if err != nil {
+		return nil, err
+	}
 
 	return &m, nil
 }
 
+func (u User) GetStorageAll() (model.Users, error) {
+	stmt, err := u.db.Prepare(_psqlGetAll)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var ms model.Users
+	var m model.User
+
+	for rows.Next() {
+		m, err = u.scanRow(rows)
+		if err != nil {
+			break
+		}
+		ms = append(ms, m)
+	}
+
+	return ms, nil
+}
+
 func (u User) scanRow(s pgx.Row) (model.User, error) {
 	m := model.User{}
-
-	themeNull := sql.NullString{}
 
 	err := s.Scan(
 		&m.ID,
 		&m.User,
 		&m.Password,
 		&m.Email,
-		themeNull,
+		&m.Theme,
 	)
 	if err != nil {
 		return model.User{}, err
 	}
-
-	m.Theme = themeNull.String
 
 	return m, nil
 }

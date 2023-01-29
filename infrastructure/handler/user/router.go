@@ -22,5 +22,6 @@ func buildHandler(specification model.RouterSpecification) handler {
 func publicRoutes(api *gin.Engine, h handler, middlewares ...gin.HandlerFunc) {
 	routes := api.Group("v1/users", middlewares...)
 
-	routes.GET("", h.getById)
+	routes.GET("/:id", h.getById)
+	routes.GET("", h.getAll)
 }

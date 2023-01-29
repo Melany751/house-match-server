@@ -13,3 +13,7 @@ type User struct {
 }
 
 type Users []User
+
+type UserRequestById struct {
+	Id string `json:"id"`
+}

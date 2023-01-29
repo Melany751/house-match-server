@@ -7,10 +7,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type Request struct {
-	Id string `json:"id"`
-}
-
 type handler struct {
 	useCase user.UseCase
 }
@@ -20,12 +16,14 @@ func newHandler(useCase user.UseCase) handler {
 }
 
 func (h handler) getById(c *gin.Context) {
-	var req Request
-	if err := c.BindJSON(&req); err != nil {
-		fmt.Printf("no se pudo convertir")
-	}
+	//var req model.UserRequestById
+	//if err := c.BindJSON(&req); err != nil {
+	//	fmt.Printf("no se pudo convertir")
+	//}
 
-	uuid, err := uuid.Parse(req.Id)
+	id := c.Param("id")
+
+	uuid, err := uuid.Parse(id)
 	if err != nil {
 		fmt.Printf("Error al convertir la cadena en UUID: %s\n", err)
 		return
@@ -37,4 +35,13 @@ func (h handler) getById(c *gin.Context) {
 		return
 	}
 	c.JSON(200, m)
+}
+
+func (h handler) getAll(c *gin.Context) {
+	ms, err := h.useCase.GetAll()
+	if err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, ms)
 }
