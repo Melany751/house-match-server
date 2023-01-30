@@ -8,7 +8,7 @@ import (
 type Storage interface {
 	GetStorageById(id uuid.UUID) (*model.User, error)
 	GetStorageAll() (model.Users, error)
-	//Create(m model.User) (bool, error)
-	//Update(id uuid.UUID, user model.User) (model.Users, error)
-	//Delete(id uuid.UUID) (bool, error)
+	CreateStorage(m model.User) (*uuid.UUID, error)
+	UpdateStorage(id uuid.UUID, user model.User) (bool, error)
+	DeleteStorage(id uuid.UUID) (bool, error)
 }

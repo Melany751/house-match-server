@@ -1,18 +1,18 @@
-package user
+package role
 
 import (
 	"fmt"
 	"github.com/Melany751/house-match-server/domain/model"
-	"github.com/Melany751/house-match-server/domain/services/user"
+	"github.com/Melany751/house-match-server/domain/services/role"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
 type handler struct {
-	useCase user.UseCase
+	useCase role.UseCase
 }
 
-func newHandler(useCase user.UseCase) handler {
+func newHandler(useCase role.UseCase) handler {
 	return handler{useCase}
 }
 
@@ -42,7 +42,7 @@ func (h handler) getAll(c *gin.Context) {
 }
 
 func (h handler) create(c *gin.Context) {
-	var req model.User
+	var req model.Role
 	if err := c.BindJSON(&req); err != nil {
 		fmt.Printf("Error read body")
 	}
@@ -64,7 +64,7 @@ func (h handler) update(c *gin.Context) {
 		return
 	}
 
-	var req model.User
+	var req model.Role
 	if err := c.BindJSON(&req); err != nil {
 		fmt.Printf("Error read body")
 	}

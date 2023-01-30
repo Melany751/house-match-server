@@ -1,4 +1,4 @@
-package user
+package role
 
 import (
 	"database/sql"
@@ -10,35 +10,35 @@ import (
 )
 
 const (
-	table = "domain.users"
+	table = "domain.roles"
 )
 
 var (
-	_psqlGetById = `SELECT * FROM domain.users WHERE id = $1`
-	_psqlGetAll  = `SELECT * FROM domain.users`
-	_psqlInsert  = `INSERT INTO domain.users (id, "user", "password", "email", "theme") VALUES ($1, $2, $3, $4, $5)`
-	_psqlUpdate  = `UPDATE domain.users SET "user"=$2, "password"=$3, "email"=$4, "theme"=$5 WHERE id=$1`
-	_psqlDelete  = `DELETE FROM domain.users WHERE id=$1`
+	_psqlGetById = `SELECT * FROM domain.roles WHERE id = $1`
+	_psqlGetAll  = `SELECT * FROM domain.roles`
+	_psqlInsert  = `INSERT INTO domain.roles (id, "name", "description", "order") VALUES ($1, $2, $3, $4)`
+	_psqlUpdate  = `UPDATE domain.roles SET "name"=$2, "description"=$3, "order"=$4 WHERE id=$1`
+	_psqlDelete  = `DELETE FROM domain.roles WHERE id=$1`
 )
 
-type User struct {
+type Role struct {
 	db *sql.DB
 }
 
-func New(db *sql.DB) User {
-	return User{db}
+func New(db *sql.DB) Role {
+	return Role{db}
 }
 
-func (u User) GetStorageById(id uuid.UUID) (*model.User, error) {
+func (r Role) GetStorageById(id uuid.UUID) (*model.Role, error) {
 	args := []any{id}
 
-	stmt, err := u.db.Prepare(_psqlGetById)
+	stmt, err := r.db.Prepare(_psqlGetById)
 	if err != nil {
 		return nil, err
 	}
 	defer stmt.Close()
 
-	m, err := u.scanRow(stmt.QueryRow(args...))
+	m, err := r.scanRow(stmt.QueryRow(args...))
 	if err != nil {
 		return nil, err
 	}
@@ -46,8 +46,8 @@ func (u User) GetStorageById(id uuid.UUID) (*model.User, error) {
 	return &m, nil
 }
 
-func (u User) GetStorageAll() (model.Users, error) {
-	stmt, err := u.db.Prepare(_psqlGetAll)
+func (r Role) GetStorageAll() (model.Roles, error) {
+	stmt, err := r.db.Prepare(_psqlGetAll)
 	if err != nil {
 		return nil, err
 	}
@@ -59,11 +59,11 @@ func (u User) GetStorageAll() (model.Users, error) {
 	}
 	defer rows.Close()
 
-	var ms model.Users
-	var m model.User
+	var ms model.Roles
+	var m model.Role
 
 	for rows.Next() {
-		m, err = u.scanRow(rows)
+		m, err = r.scanRow(rows)
 		if err != nil {
 			break
 		}
@@ -73,16 +73,16 @@ func (u User) GetStorageAll() (model.Users, error) {
 	return ms, nil
 }
 
-func (u User) CreateStorage(user model.User) (*uuid.UUID, error) {
+func (r Role) CreateStorage(role model.Role) (*uuid.UUID, error) {
 	newId, err := uuid.NewUUID()
 	if err != nil {
 		fmt.Printf("Error generate UUID: %s\n", err)
 	}
-	user.ID = newId
+	role.ID = newId
 
-	args := u.readModelUser(user)
+	args := r.readModelRole(role)
 
-	stmt, err := u.db.Prepare(_psqlInsert)
+	stmt, err := r.db.Prepare(_psqlInsert)
 	if err != nil {
 		return nil, err
 	}
@@ -96,12 +96,12 @@ func (u User) CreateStorage(user model.User) (*uuid.UUID, error) {
 	return &newId, nil
 }
 
-func (u User) UpdateStorage(id uuid.UUID, user model.User) (bool, error) {
-	user.ID = id
+func (r Role) UpdateStorage(id uuid.UUID, role model.Role) (bool, error) {
+	role.ID = id
 
-	args := u.readModelUser(user)
+	args := r.readModelRole(role)
 
-	stmt, err := u.db.Prepare(_psqlUpdate)
+	stmt, err := r.db.Prepare(_psqlUpdate)
 	if err != nil {
 		return false, err
 	}
@@ -120,10 +120,10 @@ func (u User) UpdateStorage(id uuid.UUID, user model.User) (bool, error) {
 	return true, nil
 }
 
-func (u User) DeleteStorage(id uuid.UUID) (bool, error) {
+func (r Role) DeleteStorage(id uuid.UUID) (bool, error) {
 	args := []any{id}
 
-	stmt, err := u.db.Prepare(_psqlDelete)
+	stmt, err := r.db.Prepare(_psqlDelete)
 	if err != nil {
 		return false, err
 	}
@@ -142,8 +142,8 @@ func (u User) DeleteStorage(id uuid.UUID) (bool, error) {
 	return true, nil
 }
 
-func (u User) readModelUser(user model.User) []any {
-	v := reflect.ValueOf(user)
+func (r Role) readModelRole(role model.Role) []any {
+	v := reflect.ValueOf(role)
 	values := make([]interface{}, v.NumField())
 	for i := 0; i < v.NumField(); i++ {
 		values[i] = v.Field(i).Interface()
@@ -152,18 +152,17 @@ func (u User) readModelUser(user model.User) []any {
 	return values
 }
 
-func (u User) scanRow(s pgx.Row) (model.User, error) {
-	m := model.User{}
+func (r Role) scanRow(s pgx.Row) (model.Role, error) {
+	m := model.Role{}
 
 	err := s.Scan(
 		&m.ID,
-		&m.User,
-		&m.Password,
-		&m.Email,
-		&m.Theme,
+		&m.Name,
+		&m.Description,
+		&m.Order,
 	)
 	if err != nil {
-		return model.User{}, err
+		return model.Role{}, err
 	}
 
 	return m, nil

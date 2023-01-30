@@ -1,9 +1,9 @@
-package user
+package role
 
 import (
-	useCaseUser "github.com/Melany751/house-match-server/application/usecase/user"
+	useCaseRole "github.com/Melany751/house-match-server/application/usecase/role"
 	"github.com/Melany751/house-match-server/domain/model"
-	storageUser "github.com/Melany751/house-match-server/infrastructure/storage/postgres/user"
+	storageRole "github.com/Melany751/house-match-server/infrastructure/storage/postgres/role"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,13 +14,13 @@ func NewRouter(specification model.RouterSpecification) {
 }
 
 func buildHandler(specification model.RouterSpecification) handler {
-	useCase := useCaseUser.New(storageUser.New(specification.DB))
+	useCase := useCaseRole.New(storageRole.New(specification.DB))
 
 	return newHandler(useCase)
 }
 
 func publicRoutes(api *gin.Engine, h handler, middlewares ...gin.HandlerFunc) {
-	routes := api.Group("v1/users", middlewares...)
+	routes := api.Group("v1/roles", middlewares...)
 
 	routes.GET("/:id", h.getById)
 	routes.GET("", h.getAll)
