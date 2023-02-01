@@ -11,6 +11,7 @@ gin:
       enabled: true
     sw:
       enabled: true
+      jsonPath: config/docs
     docs:
       enabled: true
       jsonPath: config/docs

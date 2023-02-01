@@ -9,10 +9,10 @@ import (
 )
 
 type handler struct {
-	useCase role.UseCase
+	useCase role.UseCaseRole
 }
 
-func newHandler(useCase role.UseCase) handler {
+func newHandler(useCase role.UseCaseRole) handler {
 	return handler{useCase}
 }
 

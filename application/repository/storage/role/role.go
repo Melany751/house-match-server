@@ -5,7 +5,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type Storage interface {
+type StorageRole interface {
 	GetStorageById(id uuid.UUID) (*model.Role, error)
 	GetStorageAll() (model.Roles, error)
 	CreateStorage(m model.Role) (*uuid.UUID, error)

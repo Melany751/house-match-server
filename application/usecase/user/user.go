@@ -8,10 +8,10 @@ import (
 )
 
 type User struct {
-	storage user.Storage
+	storage user.StorageUser
 }
 
-func New(storage user.Storage) User {
+func New(storage user.StorageUser) User {
 	return User{storage}
 }
 

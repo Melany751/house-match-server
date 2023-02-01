@@ -8,10 +8,10 @@ import (
 )
 
 type Role struct {
-	storage role.Storage
+	storage role.StorageRole
 }
 
-func New(storage role.Storage) Role {
+func New(storage role.StorageRole) Role {
 	return Role{storage}
 }
 

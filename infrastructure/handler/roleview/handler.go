@@ -1,30 +1,36 @@
-package module
+package roleview
 
 import (
 	"fmt"
 	"github.com/Melany751/house-match-server/domain/model"
-	"github.com/Melany751/house-match-server/domain/services/module"
+	roleView "github.com/Melany751/house-match-server/domain/services/roleview"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
 type handler struct {
-	useCase module.UseCaseModule
+	useCase roleView.UseCaseRoleView
 }
 
-func newHandler(useCase module.UseCaseModule) handler {
+func newHandler(useCase roleView.UseCaseRoleView) handler {
 	return handler{useCase}
 }
 
-func (h handler) getById(c *gin.Context) {
-	id := c.Param("id")
-	uid, err := uuid.Parse(id)
+func (h handler) getByIds(c *gin.Context) {
+	roleID := c.Param("roleID")
+	roleUid, err := uuid.Parse(roleID)
+	if err != nil {
+		fmt.Printf("Error al convertir la cadena en UUID: %s\n", err)
+		return
+	}
+	viewID := c.Param("viewID")
+	viewUid, err := uuid.Parse(viewID)
 	if err != nil {
 		fmt.Printf("Error al convertir la cadena en UUID: %s\n", err)
 		return
 	}
 
-	m, err := h.useCase.GetById(uid)
+	m, err := h.useCase.GetByIDs(roleUid, viewUid)
 	if err != nil {
 		c.JSON(500, err)
 		return
@@ -41,13 +47,13 @@ func (h handler) getAll(c *gin.Context) {
 	c.JSON(200, ms)
 }
 
-func (h handler) create(c *gin.Context) {
-	var req model.Module
+func (h handler) assignment(c *gin.Context) {
+	var req model.RoleView
 	if err := c.BindJSON(&req); err != nil {
 		fmt.Printf("Error read body")
 	}
 
-	id, err := h.useCase.Create(req)
+	id, err := h.useCase.Assignment(req)
 	if err != nil {
 		c.JSON(500, err)
 		return
@@ -57,19 +63,12 @@ func (h handler) create(c *gin.Context) {
 }
 
 func (h handler) update(c *gin.Context) {
-	id := c.Param("id")
-	uid, err := uuid.Parse(id)
-	if err != nil {
-		fmt.Printf("Error al convertir la cadena en UUID: %s\n", err)
-		return
-	}
-
-	var req model.Module
+	var req model.RoleView
 	if err := c.BindJSON(&req); err != nil {
 		fmt.Printf("Error read body")
 	}
 
-	created, err := h.useCase.Update(uid, req)
+	created, err := h.useCase.Update(req)
 	if err != nil {
 		c.JSON(500, err)
 		return
@@ -79,14 +78,20 @@ func (h handler) update(c *gin.Context) {
 }
 
 func (h handler) delete(c *gin.Context) {
-	id := c.Param("id")
-	uid, err := uuid.Parse(id)
+	roleID := c.Param("roleID")
+	roleUid, err := uuid.Parse(roleID)
+	if err != nil {
+		fmt.Printf("Error al convertir la cadena en UUID: %s\n", err)
+		return
+	}
+	viewID := c.Param("viewID")
+	viewUid, err := uuid.Parse(viewID)
 	if err != nil {
 		fmt.Printf("Error al convertir la cadena en UUID: %s\n", err)
 		return
 	}
 
-	deleted, err := h.useCase.Delete(uid)
+	deleted, err := h.useCase.Delete(roleUid, viewUid)
 	if err != nil {
 		c.JSON(500, err)
 		return

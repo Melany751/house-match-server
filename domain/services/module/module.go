@@ -5,7 +5,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type UseCase interface {
+type UseCaseModule interface {
 	GetById(id uuid.UUID) (*model.Module, error)
 	GetAll() (model.Modules, error)
 	Create(m model.Module) (*uuid.UUID, error)

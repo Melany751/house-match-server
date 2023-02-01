@@ -1,18 +1,18 @@
-package module
+package view
 
 import (
 	"fmt"
 	"github.com/Melany751/house-match-server/domain/model"
-	"github.com/Melany751/house-match-server/domain/services/module"
+	"github.com/Melany751/house-match-server/domain/services/view"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
 type handler struct {
-	useCase module.UseCaseModule
+	useCase view.UseCaseView
 }
 
-func newHandler(useCase module.UseCaseModule) handler {
+func newHandler(useCase view.UseCaseView) handler {
 	return handler{useCase}
 }
 
@@ -42,7 +42,7 @@ func (h handler) getAll(c *gin.Context) {
 }
 
 func (h handler) create(c *gin.Context) {
-	var req model.Module
+	var req model.View
 	if err := c.BindJSON(&req); err != nil {
 		fmt.Printf("Error read body")
 	}
@@ -64,7 +64,7 @@ func (h handler) update(c *gin.Context) {
 		return
 	}
 
-	var req model.Module
+	var req model.View
 	if err := c.BindJSON(&req); err != nil {
 		fmt.Printf("Error read body")
 	}
