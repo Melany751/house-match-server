@@ -5,9 +5,9 @@ info:
   version: 1.0.0
   x-audience: internal
 servers:
-  - url: 'http://localhost:8080/v1/users'
+  - url: 'http://localhost:8080/v1'
 paths:
-  /:
+  /users:
     get:
       operationId: getUsers
       tags:
@@ -39,7 +39,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UnexpectedError'
-  /{id}:
+    post:
+      operationId: createUser
+      tags:
+        - Users
+      summary: Create User
+      description: Esta operacion permite crear un usuario.
+      requestBody:
+        description: Cuerpo del mensaje para crear el usuario.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+  /users/{id}:
     get:
       operationId: getUser
       tags:
@@ -50,6 +88,10 @@ paths:
         - name: id
           in: path
           example: 29995f0a-44c1-4a89-91e4-8529927957d9
+          schema:
+            type: string
+            format: uuid
+          required: true
       responses:
         200:
           description: OK
@@ -75,6 +117,680 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UnexpectedError'
+    put:
+      operationId: updateUser
+      tags:
+        - Users
+      summary: User update
+      description: Esta operación permite actualizar un usuario.
+      parameters:
+        - name: id
+          in: path
+          example: 29995f0a-44c1-4a89-91e4-8529927957d9
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        description: Cuerpo del mensaje para actualizar el usuario.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+    delete:
+      operationId: deleteUser
+      tags:
+        - Users
+      summary: User delete
+      description: Esta operación permite eliminar un usuario.
+      parameters:
+        - name: id
+          in: path
+          example: 29995f0a-44c1-4a89-91e4-8529927957d9
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+
+  /roles:
+    get:
+      operationId: getRoles
+      tags:
+        - Roles
+      summary: Role list
+      description: Esta operación permite listar todos los roles.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Roles'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+    post:
+      operationId: createRole
+      tags:
+        - Roles
+      summary: Create Role
+      description: Esta operacion permite crear un rol.
+      requestBody:
+        description: Cuerpo del mensaje para crear el rol.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleInput'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Roles'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+  /roles/{id}:
+    get:
+      operationId: getRole
+      tags:
+        - Roles
+      summary: Role list
+      description: Esta operación permite listar un rol.
+      parameters:
+        - name: id
+          in: path
+          example: 29995f0a-44c1-4a89-91e4-8529927957d9
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+    put:
+      operationId: updateRole
+      tags:
+        - Roles
+      summary: Role update
+      description: Esta operación permite actualizar un rol.
+      parameters:
+        - name: id
+          in: path
+          example: 29995f0a-44c1-4a89-91e4-8529927957d9
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        description: Cuerpo del mensaje para actualizar el rol.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleInput'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+    delete:
+      operationId: deleteRole
+      tags:
+        - Roles
+      summary: Role delete
+      description: Esta operación permite eliminar un rol.
+      parameters:
+        - name: id
+          in: path
+          example: 29995f0a-44c1-4a89-91e4-8529927957d9
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+
+  /modules:
+    get:
+      operationId: getModules
+      tags:
+        - Modules
+      summary: Module list
+      description: Esta operación permite listar todos los modules.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Modules'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+    post:
+      operationId: createModule
+      tags:
+        - Modules
+      summary: Create Module
+      description: Esta operacion permite crear un module.
+      requestBody:
+        description: Cuerpo del mensaje para crear el module.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModuleInput'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Modules'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+  /modules/{id}:
+    get:
+      operationId: getModule
+      tags:
+        - Modules
+      summary: Module list
+      description: Esta operación permite listar un module.
+      parameters:
+        - name: id
+          in: path
+          example: 29995f0a-44c1-4a89-91e4-8529927957d9
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+    put:
+      operationId: updateModule
+      tags:
+        - Modules
+      summary: Module update
+      description: Esta operación permite actualizar un module.
+      parameters:
+        - name: id
+          in: path
+          example: 29995f0a-44c1-4a89-91e4-8529927957d9
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        description: Cuerpo del mensaje para actualizar el module.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModuleInput'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+    delete:
+      operationId: deleteModule
+      tags:
+        - Modules
+      summary: Module delete
+      description: Esta operación permite eliminar un module.
+      parameters:
+        - name: id
+          in: path
+          example: 29995f0a-44c1-4a89-91e4-8529927957d9
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Module'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+
+  /views:
+    get:
+      operationId: getViews
+      tags:
+        - Views
+      summary: View list
+      description: Esta operación permite listar todos los views.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Views'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+    post:
+      operationId: createView
+      tags:
+        - Views
+      summary: Create View
+      description: Esta operacion permite crear un view.
+      requestBody:
+        description: Cuerpo del mensaje para crear el view.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ViewInput'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Views'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+  /views/{id}:
+    get:
+      operationId: getView
+      tags:
+        - Views
+      summary: View list
+      description: Esta operación permite listar un view.
+      parameters:
+        - name: id
+          in: path
+          example: 29995f0a-44c1-4a89-91e4-8529927957d9
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/View'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+    put:
+      operationId: updateView
+      tags:
+        - Views
+      summary: View update
+      description: Esta operación permite actualizar un view.
+      parameters:
+        - name: id
+          in: path
+          example: 29995f0a-44c1-4a89-91e4-8529927957d9
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        description: Cuerpo del mensaje para actualizar el view.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ViewInput'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/View'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+    delete:
+      operationId: deleteView
+      tags:
+        - Views
+      summary: View delete
+      description: Esta operación permite eliminar un view.
+      parameters:
+        - name: id
+          in: path
+          example: 29995f0a-44c1-4a89-91e4-8529927957d9
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/View'
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        422:
+          description: UNPROCESSABLE_ENTITY
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntity'
+        500:
+          description: INTERNAL_SERVER_ERROR
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedError'
+
 components:
   schemas:
     User:
@@ -100,11 +816,169 @@ components:
           type: string
           example: "black"
           description: Tema de visualizacion del usuario
+    UserInput:
+      type: object
+      properties:
+        user:
+          type: string
+          example: "user"
+          description: Usuario o nick.
+        password:
+          type: string
+          example: "password"
+          description: Password del usuario.
+        email:
+          type: string
+          example: "email@email.com"
+          description: Email del usuario
+        theme:
+          type: string
+          example: "black"
+          description: Tema de visualizacion del usuario
     Users:
       type: array
       description: Lista de usuarios.
       items:
         $ref: '#/components/schemas/User'
+
+    Module:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "29995f0a-44c1-4a89-91e4-8529927957d9"
+          description: id del modulo.
+        name:
+          type: string
+          example: "name"
+          description: name.
+        description:
+          type: string
+          example: "description"
+          description: description del modulo.
+        icon:
+          type: string
+          example: "icon"
+          description: icon del modulo
+        order:
+          type: string
+          example: "black"
+          description: order de visualizacion del modulo
+    ModuleInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "name"
+          description: name.
+        description:
+          type: string
+          example: "description"
+          description: description del modulo.
+        icon:
+          type: string
+          example: "icon"
+          description: icon del modulo
+        order:
+          type: string
+          example: "order"
+          description: order de visualizacion del modulo
+    Modules:
+      type: array
+      description: Lista de modulos.
+      items:
+        $ref: '#/components/schemas/Module'
+
+    Role:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "29995f0a-44c1-4a89-91e4-8529927957d9"
+          description: id del role.
+        name:
+          type: string
+          example: "name"
+          description: name.
+        description:
+          type: string
+          example: "description"
+          description: description del role.
+        order:
+          type: string
+          example: "black"
+          description: order de visualizacion del role
+    RoleInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "name"
+          description: name.
+        description:
+          type: string
+          example: "description"
+          description: description del role.
+        order:
+          type: string
+          example: "order"
+          description: order de visualizacion del role
+    Roles:
+      type: array
+      description: Lista de modulos.
+      items:
+        $ref: '#/components/schemas/Role'
+
+    View:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "29995f0a-44c1-4a89-91e4-8529927957d9"
+          description: id del view.
+        moduleId:
+          $ref: '#/components/schemas/Module'
+        name:
+          type: string
+          example: "name"
+          description: name.
+        description:
+          type: string
+          example: "description"
+          description: description del view.
+        url:
+          type: string
+          example: "url"
+          description: url de visualizacion del view
+        icon:
+          type: string
+          example: "icon"
+          description: icon del view
+    ViewInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "name"
+          description: name.
+        description:
+          type: string
+          example: "description"
+          description: description del view.
+        url:
+          type: string
+          example: "url"
+          description: url de visualizacion del view
+        icon:
+          type: string
+          example: "icon"
+          description: icon del view
+    Views:
+      type: array
+      description: Lista de views.
+      items:
+        $ref: '#/components/schemas/View'
+
     UnexpectedError:
       type: object
       description: Object of response error

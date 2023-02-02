@@ -8,6 +8,6 @@ import (
 type UseCaseUserRole interface {
 	GetByIDs(userID, roleID uuid.UUID) (*model.UserRoleOutput, error)
 	GetAllByUserID(userID uuid.UUID) (model.UserRoleOutputs, error)
-	Assignment(userRole model.UserRole) (bool, error)
+	Assignment(userID, roleID uuid.UUID) (bool, error)
 	Delete(userID, roleID uuid.UUID) (bool, error)
 }

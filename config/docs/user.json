@@ -1,0 +1,475 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "User Management",
+    "description": "Esta API permite consultar gestion de usuarios.",
+    "version": "1.0.0",
+    "x-audience": "internal"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/v1"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "operationId": "getUsers",
+        "tags": [
+          "Users"
+        ],
+        "summary": "User list",
+        "description": "Esta operación permite listar todos los usuarios.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Users"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createUser",
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create User",
+        "description": "Esta operacion permite crear un usuario.",
+        "requestBody": {
+          "description": "Cuerpo del mensaje para crear el usuario.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Users"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "operationId": "getUser",
+        "tags": [
+          "Users"
+        ],
+        "summary": "User list",
+        "description": "Esta operación permite listar un usuario.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateUser",
+        "tags": [
+          "Users"
+        ],
+        "summary": "User update",
+        "description": "Esta operación permite actualizar un usuario.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "Cuerpo del mensaje para actualizar el usuario.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteUser",
+        "tags": [
+          "Users"
+        ],
+        "summary": "User delete",
+        "description": "Esta operación permite eliminar un usuario.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "ID del usuario."
+          },
+          "user": {
+            "type": "string",
+            "example": "user",
+            "description": "Usuario o nick."
+          },
+          "password": {
+            "type": "string",
+            "example": "password",
+            "description": "Password del usuario."
+          },
+          "email": {
+            "type": "string",
+            "example": "email@email.com",
+            "description": "Email del usuario"
+          },
+          "theme": {
+            "type": "string",
+            "example": "black",
+            "description": "Tema de visualizacion del usuario"
+          }
+        }
+      },
+      "UserInput": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "string",
+            "example": "user",
+            "description": "Usuario o nick."
+          },
+          "password": {
+            "type": "string",
+            "example": "password",
+            "description": "Password del usuario."
+          },
+          "email": {
+            "type": "string",
+            "example": "email@email.com",
+            "description": "Email del usuario"
+          },
+          "theme": {
+            "type": "string",
+            "example": "black",
+            "description": "Tema de visualizacion del usuario"
+          }
+        }
+      },
+      "Users": {
+        "type": "array",
+        "description": "Lista de usuarios.",
+        "items": {
+          "$ref": "#/components/schemas/User"
+        }
+      },
+      "UnexpectedError": {
+        "type": "object",
+        "description": "Object of response error",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "custom code of response",
+            "example": "INTERNAL_SERVER_ERROR"
+          },
+          "message": {
+            "type": "string",
+            "description": "message of response",
+            "example": "An internal server error has occurred."
+          }
+        }
+      },
+      "BadRequest": {
+        "type": "object",
+        "description": "Object of response error",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "custom code of response",
+            "example": "BAD_REQUEST"
+          },
+          "message": {
+            "type": "string",
+            "description": "message of response",
+            "example": "Request is not well-formed, syntactically incorrect, or violates schema."
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntityDetail"
+            }
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "type": "object",
+        "description": "Object of response error",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "custom code of response",
+            "example": "UNPROCESSABLE_ENTITY"
+          },
+          "message": {
+            "type": "string",
+            "description": "message of response",
+            "example": "The requested action could not be performed, semantically incorrect, or failed business validation."
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EntityDetail"
+            }
+          }
+        }
+      },
+      "EntityDetail": {
+        "type": "object",
+        "description": "Object of response error",
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "field with error",
+            "example": "distributorCode"
+          },
+          "issue": {
+            "type": "string",
+            "description": "custom code of response",
+            "example": "MISSING_REQUIRED_PARAMETER"
+          },
+          "description": {
+            "type": "string",
+            "description": "error details of field",
+            "example": "cant not be empty"
+          }
+        }
+      }
+    }
+  }
+}

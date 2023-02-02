@@ -8,6 +8,6 @@ import (
 type StorageUserRole interface {
 	GetByIDsStorage(userID, roleID uuid.UUID) (*model.UserRoleOutput, error)
 	GetAllByUserIDStorage(userID uuid.UUID) (model.UserRoleOutputs, error)
-	AssignmentStorage(userRole model.UserRole) (bool, error)
+	AssignmentStorage(userID, roleID uuid.UUID) (bool, error)
 	DeleteStorage(userID, roleID uuid.UUID) (bool, error)
 }
