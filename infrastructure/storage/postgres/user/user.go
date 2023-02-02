@@ -29,7 +29,7 @@ func New(db *sql.DB) User {
 	return User{db}
 }
 
-func (u User) GetStorageById(id uuid.UUID) (*model.User, error) {
+func (u User) GetByIdStorage(id uuid.UUID) (*model.User, error) {
 	args := []any{id}
 
 	stmt, err := u.db.Prepare(_psqlGetById)
@@ -46,7 +46,7 @@ func (u User) GetStorageById(id uuid.UUID) (*model.User, error) {
 	return &m, nil
 }
 
-func (u User) GetStorageAll() (model.Users, error) {
+func (u User) GetAllStorage() (model.Users, error) {
 	stmt, err := u.db.Prepare(_psqlGetAll)
 	if err != nil {
 		return nil, err
