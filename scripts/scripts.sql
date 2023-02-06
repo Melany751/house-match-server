@@ -36,3 +36,18 @@ create table domain.roles_views
     view_order    int,
     view_position varchar
 );
+
+create table domain.modules
+(
+    id          uuid default gen_random_uuid() not null primary key unique,
+    "name"      varchar                        not null,
+    description varchar                        not null,
+    icon        varchar                        not null,
+    "order"     int                            not null
+);
+
+create table domain.users_roles
+(
+    user_id uuid not null constraint users_roles_users_id_fk references domain.users,
+    role_id uuid not null constraint users_roles_roles_id_fk references domain.roles
+);

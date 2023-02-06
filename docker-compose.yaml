@@ -12,7 +12,6 @@ services:
         POSTGRES_DB: housematch
 
   api:
-    build: .
     image: rhyme80/housematch-server
     container_name: api
     ports:

@@ -16,7 +16,6 @@ func newHandler(useCase userRole.UseCaseUserRole) handler {
 }
 
 func (h handler) getByIds(c *gin.Context) {
-	fmt.Println("#######################0")
 	userId := c.Param("userId")
 	userUid, err := uuid.Parse(userId)
 	if err != nil {
@@ -30,14 +29,12 @@ func (h handler) getByIds(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("#######################1")
-
 	m, err := h.useCase.GetByIDs(userUid, roleUid)
 	if err != nil {
 		c.JSON(500, err)
 		return
 	}
-	fmt.Println("#######################2")
+
 	c.JSON(200, m)
 }
 
