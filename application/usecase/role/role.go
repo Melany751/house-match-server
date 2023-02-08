@@ -43,12 +43,12 @@ func (r Role) Create(role model.Role) (*uuid.UUID, error) {
 }
 
 func (r Role) Update(id uuid.UUID, role model.Role) (bool, error) {
-	created, err := r.storage.UpdateStorage(id, role)
+	updated, err := r.storage.UpdateStorage(id, role)
 	if err != nil {
 		return false, fmt.Errorf("role.storage.Update(): %w", err)
 	}
 
-	return created, nil
+	return updated, nil
 }
 
 func (r Role) Delete(id uuid.UUID) (bool, error) {

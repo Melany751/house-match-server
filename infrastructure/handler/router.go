@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/Melany751/house-match-server/domain/model"
 	routerModule "github.com/Melany751/house-match-server/infrastructure/handler/module"
+	routerProperty "github.com/Melany751/house-match-server/infrastructure/handler/property"
 	routerRole "github.com/Melany751/house-match-server/infrastructure/handler/role"
 	routerRoleView "github.com/Melany751/house-match-server/infrastructure/handler/roleview"
 	routerUser "github.com/Melany751/house-match-server/infrastructure/handler/user"
@@ -17,4 +18,5 @@ func InitRoutes(specification model.RouterSpecification) {
 	routerView.NewRouter(specification)
 	routerRoleView.NewRouter(specification)
 	routerUserRole.NewRouter(specification)
+	routerProperty.NewRouter(specification)
 }

@@ -16,45 +16,45 @@ func New(storage module.StorageModule) Module {
 }
 
 func (m Module) GetById(id uuid.UUID) (*model.Module, error) {
-	role, err := m.storage.GetStorageById(id)
+	module, err := m.storage.GetStorageById(id)
 	if err != nil {
-		return nil, fmt.Errorf("role.storage.GetById(): %w", err)
+		return nil, fmt.Errorf("module.storage.GetById(): %w", err)
 	}
 
-	return role, nil
+	return module, nil
 }
 
 func (m Module) GetAll() (model.Modules, error) {
-	roles, err := m.storage.GetStorageAll()
+	modules, err := m.storage.GetStorageAll()
 	if err != nil {
-		return nil, fmt.Errorf("role.storage.GetAll(): %w", err)
+		return nil, fmt.Errorf("module.storage.GetAll(): %w", err)
 	}
 
-	return roles, nil
+	return modules, nil
 }
 
-func (m Module) Create(role model.Module) (*uuid.UUID, error) {
-	id, err := m.storage.CreateStorage(role)
+func (m Module) Create(module model.Module) (*uuid.UUID, error) {
+	id, err := m.storage.CreateStorage(module)
 	if err != nil {
-		return nil, fmt.Errorf("role.storage.Create(): %w", err)
+		return nil, fmt.Errorf("module.storage.Create(): %w", err)
 	}
 
 	return id, nil
 }
 
-func (m Module) Update(id uuid.UUID, role model.Module) (bool, error) {
-	created, err := m.storage.UpdateStorage(id, role)
+func (m Module) Update(id uuid.UUID, module model.Module) (bool, error) {
+	updated, err := m.storage.UpdateStorage(id, module)
 	if err != nil {
-		return false, fmt.Errorf("role.storage.Update(): %w", err)
+		return false, fmt.Errorf("module.storage.Update(): %w", err)
 	}
 
-	return created, nil
+	return updated, nil
 }
 
 func (m Module) Delete(id uuid.UUID) (bool, error) {
 	deleted, err := m.storage.DeleteStorage(id)
 	if err != nil {
-		return false, fmt.Errorf("role.storage.Delete(): %w", err)
+		return false, fmt.Errorf("module.storage.Delete(): %w", err)
 	}
 
 	return deleted, nil

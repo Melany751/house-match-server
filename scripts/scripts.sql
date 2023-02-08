@@ -51,3 +51,15 @@ create table domain.users_roles
     user_id uuid not null constraint users_roles_users_id_fk references domain.users,
     role_id uuid not null constraint users_roles_roles_id_fk references domain.roles
 );
+
+create table domain.properties
+(
+    id               uuid default gen_random_uuid() not null primary key unique,
+    user_id          uuid                           not null constraint users_roles_users_id_fk references domain.users,
+    description      varchar                        not null,
+    "type"           varchar                        not null,
+    "length"         float                          not null,
+    width            float                          not null,
+    floor            int                            not null,
+    number_of_floors int                            not null
+);

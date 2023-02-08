@@ -9,6 +9,6 @@ type UseCaseRole interface {
 	GetById(id uuid.UUID) (*model.Role, error)
 	GetAll() (model.Roles, error)
 	Create(m model.Role) (*uuid.UUID, error)
-	Update(id uuid.UUID, user model.Role) (bool, error)
+	Update(id uuid.UUID, model model.Role) (bool, error)
 	Delete(id uuid.UUID) (bool, error)
 }

@@ -1861,6 +1861,318 @@
           }
         }
       }
+    },
+    "/properties": {
+      "get": {
+        "operationId": "getProperties",
+        "tags": [
+          "Properties"
+        ],
+        "summary": "Properties list",
+        "description": "Esta operación permite listar todos los properties.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Properties"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createProperty",
+        "tags": [
+          "Properties"
+        ],
+        "summary": "Create Property",
+        "description": "Esta operacion permite crear un property.",
+        "requestBody": {
+          "description": "Cuerpo del mensaje para crear el property.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PropertyInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/properties/{id}": {
+      "get": {
+        "operationId": "getProperty",
+        "tags": [
+          "Properties"
+        ],
+        "summary": "Property list",
+        "description": "Esta operación permite listar un property.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Property"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateProperty",
+        "tags": [
+          "Properties"
+        ],
+        "summary": "Property update",
+        "description": "Esta operación permite actualizar un property.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "Cuerpo del mensaje para actualizar el property.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PropertyInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoolOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteProperty",
+        "tags": [
+          "Properties"
+        ],
+        "summary": "Property delete",
+        "description": "Esta operación permite eliminar un property.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoolOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2003,12 +2315,12 @@
       "UserRoleInput": {
         "type": "object",
         "properties": {
-          "userID": {
+          "user_id": {
             "type": "string",
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "description": "id del user."
           },
-          "roleID": {
+          "role_id": {
             "type": "string",
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "description": "id del role."
@@ -2069,7 +2381,7 @@
       },
       "Roles": {
         "type": "array",
-        "description": "Lista de modulos.",
+        "description": "Lista de modules",
         "items": {
           "$ref": "#/components/schemas/Role"
         }
@@ -2098,12 +2410,12 @@
       "RoleViewInput": {
         "type": "object",
         "properties": {
-          "roleID": {
+          "role_id": {
             "type": "string",
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "description": "id del role."
           },
-          "viewID": {
+          "view_id": {
             "type": "string",
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "description": "id de view."
@@ -2135,7 +2447,7 @@
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "description": "id del view."
           },
-          "moduleId": {
+          "module_id": {
             "$ref": "#/components/schemas/Module"
           },
           "name": {
@@ -2163,6 +2475,11 @@
       "ViewInput": {
         "type": "object",
         "properties": {
+          "module_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del module."
+          },
           "name": {
             "type": "string",
             "example": "name",
@@ -2190,6 +2507,106 @@
         "description": "Lista de views.",
         "items": {
           "$ref": "#/components/schemas/View"
+        }
+      },
+      "Property": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del property."
+          },
+          "user_id": {
+            "$ref": "#/components/schemas/User"
+          },
+          "description": {
+            "type": "string",
+            "example": "description",
+            "description": "description del property."
+          },
+          "type": {
+            "type": "string",
+            "example": "type",
+            "description": "type del property"
+          },
+          "length": {
+            "type": "number",
+            "example": 1.0,
+            "description": "length del property"
+          },
+          "width": {
+            "type": "number",
+            "example": 1.0,
+            "description": "width del property"
+          },
+          "area": {
+            "type": "number",
+            "example": 1.0,
+            "description": "area del property"
+          },
+          "floor": {
+            "type": "integer",
+            "example": 1,
+            "description": "floor del property"
+          },
+          "number_of_floor": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of floors del property"
+          }
+        }
+      },
+      "PropertyInput": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del usuario."
+          },
+          "description": {
+            "type": "string",
+            "example": "description",
+            "description": "description del property."
+          },
+          "type": {
+            "type": "string",
+            "example": "type",
+            "description": "type del property"
+          },
+          "length": {
+            "type": "number",
+            "example": 1.0,
+            "description": "length del property"
+          },
+          "width": {
+            "type": "number",
+            "example": 1.0,
+            "description": "width del property"
+          },
+          "area": {
+            "type": "number",
+            "example": 1.0,
+            "description": "area del property"
+          },
+          "floor": {
+            "type": "integer",
+            "example": 1,
+            "description": "floor del property"
+          },
+          "number_of_floor": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of floors del property"
+          }
+        }
+      },
+      "Properties": {
+        "type": "array",
+        "description": "Lista de properties.",
+        "items": {
+          "$ref": "#/components/schemas/Property"
         }
       },
       "IdOutput": {

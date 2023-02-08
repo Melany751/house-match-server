@@ -9,6 +9,6 @@ type UseCaseModule interface {
 	GetById(id uuid.UUID) (*model.Module, error)
 	GetAll() (model.Modules, error)
 	Create(m model.Module) (*uuid.UUID, error)
-	Update(id uuid.UUID, user model.Module) (bool, error)
+	Update(id uuid.UUID, model model.Module) (bool, error)
 	Delete(id uuid.UUID) (bool, error)
 }

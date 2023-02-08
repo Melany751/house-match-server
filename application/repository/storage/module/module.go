@@ -9,6 +9,6 @@ type StorageModule interface {
 	GetStorageById(id uuid.UUID) (*model.Module, error)
 	GetStorageAll() (model.Modules, error)
 	CreateStorage(m model.Module) (*uuid.UUID, error)
-	UpdateStorage(id uuid.UUID, role model.Module) (bool, error)
+	UpdateStorage(id uuid.UUID, module model.Module) (bool, error)
 	DeleteStorage(id uuid.UUID) (bool, error)
 }
