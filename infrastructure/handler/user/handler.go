@@ -47,13 +47,16 @@ func (h handler) create(c *gin.Context) {
 		fmt.Printf("Error read body")
 	}
 
-	id, err := h.useCase.Create(req)
+	m, err := h.useCase.Create(req)
 	if err != nil {
-		c.JSON(500, err)
+		c.JSON(500, err.Error())
 		return
 	}
 
-	c.JSON(200, id)
+	fmt.Println("########")
+	fmt.Println(m)
+
+	c.JSON(200, m)
 }
 
 func (h handler) update(c *gin.Context) {

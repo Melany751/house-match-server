@@ -1,6 +1,7 @@
 package user
 
 import (
+	"errors"
 	"fmt"
 	"github.com/Melany751/house-match-server/application/repository/storage/user"
 	"github.com/Melany751/house-match-server/domain/model"
@@ -33,13 +34,16 @@ func (u User) GetAll() (model.Users, error) {
 	return users, nil
 }
 
-func (u User) Create(user model.User) (*uuid.UUID, error) {
+func (u User) Create(user model.User) (*model.CreateOutput, error) {
 	id, err := u.storage.CreateStorage(user)
 	if err != nil {
-		return nil, fmt.Errorf("user.storage.Create(): %w", err)
+		return nil, errors.New("user.use.Create(): %s" + err.Error())
 	}
 
-	return id, nil
+	var m model.CreateOutput
+	m.Id = id
+
+	return &m, nil
 }
 
 func (u User) Update(id uuid.UUID, user model.User) (bool, error) {

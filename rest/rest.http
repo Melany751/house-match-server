@@ -1,3 +1,14 @@
+POST http://localhost:8080/v1/users
+    accept: application/json
+    Content-Type: application/json
+    -d {
+"user": "user",
+"password": "password",
+"email": "email@email.com",
+"theme": "black"
+}
+
 GET http://localhost:8080/v1/users/
 Accept: */*
-Cache-Control: no-cache
+Cache-Control: no-cache;
+
