@@ -10,6 +10,5 @@ type UseCaseUser interface {
 	GetAll() (model.Users, error)
 	Create(m model.User) (*model.CreateOutput, error)
 	Update(id uuid.UUID, user model.User) (bool, error)
-	//Update(id uuid.UUID, user model.User) (*model.UpdateOutput, error)
 	Delete(id uuid.UUID) (bool, error)
 }

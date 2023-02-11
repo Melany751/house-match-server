@@ -3,6 +3,7 @@ package user
 import (
 	"fmt"
 	"github.com/Melany751/house-match-server/domain/model"
+	responseError "github.com/Melany751/house-match-server/domain/services/error"
 	"github.com/Melany751/house-match-server/domain/services/user"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -29,7 +30,7 @@ func (h handler) getById(c *gin.Context) {
 		c.JSON(500, err)
 		return
 	}
-	c.JSON(200, m)
+	c.JSON(responseError.OK(m))
 }
 
 func (h handler) getAll(c *gin.Context) {
@@ -53,10 +54,7 @@ func (h handler) create(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("########")
-	fmt.Println(m)
-
-	c.JSON(200, m)
+	c.JSON(responseError.Created(m))
 }
 
 func (h handler) update(c *gin.Context) {
@@ -78,7 +76,7 @@ func (h handler) update(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, created)
+	c.JSON(responseError.Updated(created))
 }
 
 func (h handler) delete(c *gin.Context) {
@@ -95,5 +93,5 @@ func (h handler) delete(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, deleted)
+	c.JSON(responseError.Deleted(deleted))
 }

@@ -18,3 +18,7 @@ gin:
     middleware:
       logging:
         enabled: true
+      cors:
+        enabled: true
+        allowOrigins:
+          - "http://localhost:*"
