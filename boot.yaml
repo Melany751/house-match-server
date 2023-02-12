@@ -20,5 +20,13 @@ gin:
         enabled: true
       cors:
         enabled: true
-        allowOrigins:
-          - "http://localhost:*"
+        options:
+          allowedOrigins:
+            - "*"
+          allowedMethods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+          allowedHeaders:
+            - "*"
