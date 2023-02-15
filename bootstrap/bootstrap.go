@@ -18,7 +18,6 @@ func Run(boot []byte) {
 	ginEntry.Bootstrap(context.Background())
 
 	api := ginEntry.Router
-	//api.Use(corsMiddleware())
 
 	handler.InitRoutes(model.RouterSpecification{
 		Api: api,
