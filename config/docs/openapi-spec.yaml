@@ -1443,7 +1443,7 @@ components:
 
     UnexpectedError:
       type: object
-      description: Object of response error
+      description: Object of response response
       properties:
         code:
           type: string
@@ -1452,10 +1452,10 @@ components:
         message:
           type: string
           description: message of response
-          example: An internal server error has occurred.
+          example: An internal server response has occurred.
     BadRequest:
       type: object
-      description: Object of response error
+      description: Object of response response
       properties:
         code:
           type: string
@@ -1471,7 +1471,7 @@ components:
             $ref: '#/components/schemas/EntityDetail'
     UnprocessableEntity:
       type: object
-      description: Object of response error
+      description: Object of response response
       properties:
         code:
           type: string
@@ -1487,11 +1487,11 @@ components:
             $ref: '#/components/schemas/EntityDetail'
     EntityDetail:
       type: object
-      description: Object of response error
+      description: Object of response response
       properties:
         field:
           type: string
-          description: field with error
+          description: field with response
           example: "distributorCode"
         issue:
           type: string
@@ -1499,5 +1499,5 @@ components:
           example: MISSING_REQUIRED_PARAMETER
         description:
           type: string
-          description: error details of field
+          description: response details of field
           example: cant not be empty
