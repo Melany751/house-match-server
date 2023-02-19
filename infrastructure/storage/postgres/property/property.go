@@ -14,11 +14,39 @@ const (
 )
 
 var (
-	_psqlGetById = `SELECT * FROM domain.properties WHERE id = $1`
-	_psqlGetAll  = `SELECT * FROM domain.properties`
-	_psqlInsert  = `INSERT INTO domain.properties (id, "name", "description", "icon", "order") VALUES ($1, $2, $3, $4, $5)`
-	_psqlUpdate  = `UPDATE domain.properties SET "name"=$2, "description"=$3, "icon"=$4, "order"=$5 WHERE id=$1`
-	_psqlDelete  = `DELETE FROM domain.properties WHERE id=$1`
+	_psqlGetById = `SELECT 
+    				p.id,
+    				p.description,
+    				p.type,
+    				p.length,
+    				p.width,
+    				p.area,
+    				p.floor,
+    				p.number_of_floors,
+    				u.id, 
+    				u.user, 
+    				u.password, 
+    				u.email, 
+    				u.theme
+					FROM domain.properties p INNER JOIN domain.users u ON p.user_id=u.id
+					WHERE p.id = $1`
+	_psqlGetAll = `SELECT 
+    				p.id,
+    				p.description,
+    				p.type,
+    				p.length,
+    				p.width,
+    				p.area,
+    				p.floor,
+    				p.number_of_floors,
+    				u.id, 
+    				u.user, 
+    				u.password, 
+    				u.email, 
+    				u.theme FROM domain.properties p INNER JOIN domain.users u ON p.user_id=u.id`
+	_psqlInsert = `INSERT INTO domain.properties (id, "user_id", "description", "type", "length","width","area","floor","number_of_floors") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
+	_psqlUpdate = `UPDATE domain.properties SET "user_id"=$2, "description"=$3, "type"=$4, "length"=$5, "width"=$6, "area"=$7, "floor"=$8, "number_of_floors"=$9 WHERE id=$1`
+	_psqlDelete = `DELETE FROM domain.properties WHERE id=$1`
 )
 
 type Property struct {
@@ -29,7 +57,7 @@ func New(db *sql.DB) Property {
 	return Property{db}
 }
 
-func (p Property) GetStorageById(id uuid.UUID) (*model.Property, error) {
+func (p Property) GetStorageById(id uuid.UUID) (*model.PropertyOutput, error) {
 	args := []any{id}
 
 	stmt, err := p.db.Prepare(_psqlGetById)
@@ -38,7 +66,7 @@ func (p Property) GetStorageById(id uuid.UUID) (*model.Property, error) {
 	}
 	defer stmt.Close()
 
-	m, err := p.scanRow(stmt.QueryRow(args...))
+	m, err := p.scanRowWithUser(stmt.QueryRow(args...))
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +74,7 @@ func (p Property) GetStorageById(id uuid.UUID) (*model.Property, error) {
 	return &m, nil
 }
 
-func (p Property) GetStorageAll() (model.Properties, error) {
+func (p Property) GetStorageAll() (model.PropertiesOutput, error) {
 	stmt, err := p.db.Prepare(_psqlGetAll)
 	if err != nil {
 		return nil, err
@@ -59,11 +87,11 @@ func (p Property) GetStorageAll() (model.Properties, error) {
 	}
 	defer rows.Close()
 
-	var ms model.Properties
-	var m model.Property
+	var ms model.PropertiesOutput
+	var m model.PropertyOutput
 
 	for rows.Next() {
-		m, err = p.scanRow(rows)
+		m, err = p.scanRowWithUser(rows)
 		if err != nil {
 			break
 		}
@@ -168,6 +196,30 @@ func (p Property) scanRow(s pgx.Row) (model.Property, error) {
 	)
 	if err != nil {
 		return model.Property{}, err
+	}
+
+	return m, nil
+}
+
+func (p Property) scanRowWithUser(s pgx.Row) (model.PropertyOutput, error) {
+	m := model.PropertyOutput{}
+	err := s.Scan(
+		&m.ID,
+		&m.Description,
+		&m.Type,
+		&m.Length,
+		&m.Width,
+		&m.Area,
+		&m.Floor,
+		&m.NumberOfFloor,
+		&m.User.ID,
+		&m.User.User,
+		&m.User.Password,
+		&m.User.Email,
+		&m.User.Theme,
+	)
+	if err != nil {
+		return model.PropertyOutput{}, err
 	}
 
 	return m, nil

@@ -33,22 +33,24 @@ func (r Role) GetAll() (model.Roles, error) {
 	return roles, nil
 }
 
-func (r Role) Create(role model.Role) (*uuid.UUID, error) {
+func (r Role) Create(role model.Role) (*model.CreateOutput, error) {
 	id, err := r.storage.CreateStorage(role)
 	if err != nil {
 		return nil, fmt.Errorf("role.storage.Create(): %w", err)
 	}
-
-	return id, nil
+	var m model.CreateOutput
+	m.Id = id
+	return &m, nil
 }
 
-func (r Role) Update(id uuid.UUID, role model.Role) (bool, error) {
+func (r Role) Update(id uuid.UUID, role model.Role) (*model.UpdateOutput, error) {
 	updated, err := r.storage.UpdateStorage(id, role)
 	if err != nil {
-		return false, fmt.Errorf("role.storage.Update(): %w", err)
+		return nil, fmt.Errorf("role.storage.Update(): %w", err)
 	}
-
-	return updated, nil
+	var m model.UpdateOutput
+	m.Updated = updated
+	return &m, nil
 }
 
 func (r Role) Delete(id uuid.UUID) (bool, error) {

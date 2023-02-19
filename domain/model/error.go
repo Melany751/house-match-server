@@ -7,3 +7,7 @@ type ErrorApi struct {
 	Code    string `json:"code"`
 	Message string `json:"message"`
 }
+
+type ResponseError struct {
+	Error string `json:"error"`
+}

@@ -33,22 +33,28 @@ func (m Module) GetAll() (model.Modules, error) {
 	return modules, nil
 }
 
-func (m Module) Create(module model.Module) (*uuid.UUID, error) {
+func (m Module) Create(module model.Module) (*model.CreateOutput, error) {
 	id, err := m.storage.CreateStorage(module)
 	if err != nil {
 		return nil, fmt.Errorf("module.storage.Create(): %w", err)
 	}
 
-	return id, nil
+	var mo model.CreateOutput
+	mo.Id = id
+
+	return &mo, nil
 }
 
-func (m Module) Update(id uuid.UUID, module model.Module) (bool, error) {
+func (m Module) Update(id uuid.UUID, module model.Module) (*model.UpdateOutput, error) {
 	updated, err := m.storage.UpdateStorage(id, module)
 	if err != nil {
-		return false, fmt.Errorf("module.storage.Update(): %w", err)
+		return nil, fmt.Errorf("module.storage.Update(): %w", err)
 	}
 
-	return updated, nil
+	var mo model.UpdateOutput
+	mo.Updated = updated
+
+	return &mo, nil
 }
 
 func (m Module) Delete(id uuid.UUID) (bool, error) {

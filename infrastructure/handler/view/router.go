@@ -1,96 +1,30 @@
 package view
 
 import (
-	"fmt"
+	useCaseView "github.com/Melany751/house-match-server/application/usecase/view"
 	"github.com/Melany751/house-match-server/domain/model"
-	"github.com/Melany751/house-match-server/domain/services/view"
+	storageView "github.com/Melany751/house-match-server/infrastructure/storage/postgres/view"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
-type handler struct {
-	useCase view.UseCaseView
+func NewRouter(specification model.RouterSpecification) {
+	handler := buildHandler(specification)
+
+	publicRoutes(specification.Api, handler)
 }
 
-func newHandler(useCase view.UseCaseView) handler {
-	return handler{useCase}
+func buildHandler(specification model.RouterSpecification) handler {
+	useCase := useCaseView.New(storageView.New(specification.DB))
+
+	return newHandler(useCase)
 }
 
-func (h handler) getById(c *gin.Context) {
-	id := c.Param("id")
-	uid, err := uuid.Parse(id)
-	if err != nil {
-		fmt.Printf("Error al convertir la cadena en UUID: %s\n", err)
-		return
-	}
+func publicRoutes(api *gin.Engine, h handler, middlewares ...gin.HandlerFunc) {
+	routes := api.Group("v1/views", middlewares...)
 
-	m, err := h.useCase.GetById(uid)
-	if err != nil {
-		c.JSON(500, err)
-		return
-	}
-	c.JSON(200, m)
-}
-
-func (h handler) getAll(c *gin.Context) {
-	ms, err := h.useCase.GetAll()
-	if err != nil {
-		c.JSON(500, err)
-		return
-	}
-	c.JSON(200, ms)
-}
-
-func (h handler) create(c *gin.Context) {
-	var req model.View
-	if err := c.BindJSON(&req); err != nil {
-		fmt.Printf("Error read body")
-	}
-
-	id, err := h.useCase.Create(req)
-	if err != nil {
-		c.JSON(500, err)
-		return
-	}
-
-	c.JSON(200, id)
-}
-
-func (h handler) update(c *gin.Context) {
-	id := c.Param("id")
-	uid, err := uuid.Parse(id)
-	if err != nil {
-		fmt.Printf("Error al convertir la cadena en UUID: %s\n", err)
-		return
-	}
-
-	var req model.View
-	if err := c.BindJSON(&req); err != nil {
-		fmt.Printf("Error read body")
-	}
-
-	created, err := h.useCase.Update(uid, req)
-	if err != nil {
-		c.JSON(500, err)
-		return
-	}
-
-	c.JSON(200, created)
-}
-
-func (h handler) delete(c *gin.Context) {
-	id := c.Param("id")
-	uid, err := uuid.Parse(id)
-	if err != nil {
-		fmt.Printf("Error al convertir la cadena en UUID: %s\n", err)
-		return
-	}
-
-	deleted, err := h.useCase.Delete(uid)
-	if err != nil {
-		c.JSON(500, err)
-		return
-	}
-
-	c.JSON(200, deleted)
+	routes.GET("/:id", h.getById)
+	routes.GET("", h.getAll)
+	routes.POST("", h.create)
+	routes.PUT("/:id", h.update)
+	routes.DELETE("/:id", h.delete)
 }

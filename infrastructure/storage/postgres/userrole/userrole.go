@@ -43,7 +43,7 @@ var (
 		         INNER JOIN domain.users u on u.id = ur.user_id
 		WHERE ur.user_id = $1;`
 	_psqlInsert = `INSERT INTO domain.users_roles ("user_id", "role_id") VALUES ($1, $2);`
-	_psqlDelete = `DELETE FROM domain.users_roles WHERE "role_id"=$1 and "view_id"=$2;`
+	_psqlDelete = `DELETE FROM domain.users_roles WHERE "user_id"=$1 and "role_id"=$2;`
 )
 
 type UserRole struct {

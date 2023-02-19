@@ -31,17 +31,16 @@ func (r UserRole) GetAllByUserID(userID uuid.UUID) (model.UserRoleOutputs, error
 	if err != nil {
 		return nil, fmt.Errorf("userRole.storage.GetAll(): %w", err)
 	}
-
 	return userRoles, nil
 }
 
-func (r UserRole) Assignment(userID, roleID uuid.UUID) (bool, error) {
+func (r UserRole) Assignment(userID, roleID uuid.UUID) (*model.AssignOutput, error) {
 	id, err := r.storage.AssignmentStorage(userID, roleID)
 	if err != nil {
-		return false, fmt.Errorf("userRole.storage.Create(): %w", err)
+		return nil, fmt.Errorf("userRole.storage.Create(): %w", err)
 	}
-
-	return id, nil
+	var m = model.AssignOutput{Assigned: id}
+	return &m, nil
 }
 
 func (r UserRole) Delete(userID, roleID uuid.UUID) (bool, error) {

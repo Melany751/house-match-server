@@ -42,13 +42,14 @@ func (rv RoleView) Assignment(roleView model.RoleView) (bool, error) {
 	return assignment, nil
 }
 
-func (rv RoleView) Update(roleView model.RoleView) (bool, error) {
-	created, err := rv.storage.UpdateStorage(roleView)
+func (rv RoleView) Update(roleView model.RoleView) (*model.UpdateOutput, error) {
+	updated, err := rv.storage.UpdateStorage(roleView)
 	if err != nil {
-		return false, fmt.Errorf("roleView.storage.Update(): %w", err)
+		return nil, fmt.Errorf("roleView.storage.Update(): %w", err)
 	}
-
-	return created, nil
+	var m model.UpdateOutput
+	m.Updated = updated
+	return &m, nil
 }
 
 func (rv RoleView) Delete(roleID, viewID uuid.UUID) (bool, error) {

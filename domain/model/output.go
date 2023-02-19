@@ -7,9 +7,13 @@ type CreateOutput struct {
 }
 
 type DeleteOutput struct {
-	Deleted *bool `json:"deleted"`
+	Deleted bool `json:"deleted"`
 }
 
 type UpdateOutput struct {
-	Updated *bool `json:"updated"`
+	Updated bool `json:"updated"`
+}
+
+type AssignOutput struct {
+	Assigned bool `json:"assigned"`
 }

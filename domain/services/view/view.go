@@ -8,7 +8,7 @@ import (
 type UseCaseView interface {
 	GetById(id uuid.UUID) (*model.ViewOutput, error)
 	GetAll() (model.ViewsOutput, error)
-	Create(m model.View) (*uuid.UUID, error)
-	Update(id uuid.UUID, model model.View) (bool, error)
+	Create(m model.View) (*model.CreateOutput, error)
+	Update(id uuid.UUID, model model.View) (*model.UpdateOutput, error)
 	Delete(id uuid.UUID) (bool, error)
 }

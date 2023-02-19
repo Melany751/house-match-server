@@ -2,6 +2,8 @@ package userrole
 
 import (
 	"fmt"
+	"github.com/Melany751/house-match-server/domain/model"
+	"github.com/Melany751/house-match-server/domain/services/response"
 	userRole "github.com/Melany751/house-match-server/domain/services/userrole"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -31,11 +33,11 @@ func (h handler) getByIds(c *gin.Context) {
 
 	m, err := h.useCase.GetByIDs(userUid, roleUid)
 	if err != nil {
-		c.JSON(500, err)
+		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
 		return
 	}
 
-	c.JSON(200, m)
+	c.JSON(response.OK(m))
 }
 
 func (h handler) getAll(c *gin.Context) {
@@ -48,10 +50,10 @@ func (h handler) getAll(c *gin.Context) {
 
 	ms, err := h.useCase.GetAllByUserID(userUid)
 	if err != nil {
-		c.JSON(500, err)
+		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
 		return
 	}
-	c.JSON(200, ms)
+	c.JSON(response.OK(ms))
 }
 
 func (h handler) create(c *gin.Context) {
@@ -70,11 +72,11 @@ func (h handler) create(c *gin.Context) {
 
 	id, err := h.useCase.Assignment(userUid, roleUid)
 	if err != nil {
-		c.JSON(500, err)
+		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
 		return
 	}
 
-	c.JSON(200, id)
+	c.JSON(response.Created(id))
 }
 
 func (h handler) delete(c *gin.Context) {
@@ -93,9 +95,9 @@ func (h handler) delete(c *gin.Context) {
 
 	deleted, err := h.useCase.Delete(userUid, roleUid)
 	if err != nil {
-		c.JSON(500, err)
+		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
 		return
 	}
 
-	c.JSON(200, deleted)
+	c.JSON(response.Deleted(deleted))
 }

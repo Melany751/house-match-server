@@ -17,3 +17,17 @@ type Property struct {
 }
 
 type Properties []Property
+
+type PropertyOutput struct {
+	ID            uuid.UUID `json:"id"`
+	User          User      `json:"user"`
+	Description   string    `json:"description"`
+	Type          string    `json:"type"`
+	Length        float64   `json:"length"`
+	Width         float64   `json:"width"`
+	Area          float64   `json:"area"`
+	Floor         float64   `json:"floor"`
+	NumberOfFloor float64   `json:"number_of_floor"`
+}
+
+type PropertiesOutput []PropertyOutput

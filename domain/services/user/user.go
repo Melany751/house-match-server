@@ -9,6 +9,6 @@ type UseCaseUser interface {
 	GetById(id uuid.UUID) (*model.User, error)
 	GetAll() (model.Users, error)
 	Create(m model.User) (*model.CreateOutput, error)
-	Update(id uuid.UUID, user model.User) (bool, error)
-	Delete(id uuid.UUID) (bool, error)
+	Update(id uuid.UUID, user model.User) (*model.UpdateOutput, error)
+	Delete(id uuid.UUID) (*model.DeleteOutput, error)
 }

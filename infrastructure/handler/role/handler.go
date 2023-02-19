@@ -3,6 +3,7 @@ package role
 import (
 	"fmt"
 	"github.com/Melany751/house-match-server/domain/model"
+	"github.com/Melany751/house-match-server/domain/services/response"
 	"github.com/Melany751/house-match-server/domain/services/role"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -26,34 +27,35 @@ func (h handler) getById(c *gin.Context) {
 
 	m, err := h.useCase.GetById(uid)
 	if err != nil {
-		c.JSON(500, err)
+		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
 		return
 	}
-	c.JSON(200, m)
+	c.JSON(response.OK(m))
 }
 
 func (h handler) getAll(c *gin.Context) {
 	ms, err := h.useCase.GetAll()
 	if err != nil {
-		c.JSON(500, err)
+		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
 		return
 	}
-	c.JSON(200, ms)
+	c.JSON(response.OK(ms))
 }
 
 func (h handler) create(c *gin.Context) {
 	var req model.Role
 	if err := c.BindJSON(&req); err != nil {
-		fmt.Printf("Error read body")
+		c.JSON(response.BadRequest(model.ResponseError{fmt.Sprintf("Error read body, error: %s", err.Error())}))
+		return
 	}
 
 	id, err := h.useCase.Create(req)
 	if err != nil {
-		c.JSON(500, err)
+		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
 		return
 	}
 
-	c.JSON(200, id)
+	c.JSON(response.Created(id))
 }
 
 func (h handler) update(c *gin.Context) {
@@ -66,16 +68,17 @@ func (h handler) update(c *gin.Context) {
 
 	var req model.Role
 	if err := c.BindJSON(&req); err != nil {
-		fmt.Printf("Error read body")
+		c.JSON(response.BadRequest(model.ResponseError{fmt.Sprintf("Error read body, error: %s", err.Error())}))
+		return
 	}
 
 	created, err := h.useCase.Update(uid, req)
 	if err != nil {
-		c.JSON(500, err)
+		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
 		return
 	}
 
-	c.JSON(200, created)
+	c.JSON(response.Updated(created))
 }
 
 func (h handler) delete(c *gin.Context) {
@@ -88,9 +91,9 @@ func (h handler) delete(c *gin.Context) {
 
 	deleted, err := h.useCase.Delete(uid)
 	if err != nil {
-		c.JSON(500, err)
+		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
 		return
 	}
 
-	c.JSON(200, deleted)
+	c.JSON(response.Deleted(deleted))
 }

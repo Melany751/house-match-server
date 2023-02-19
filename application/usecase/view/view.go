@@ -31,22 +31,24 @@ func (v View) GetAll() (model.ViewsOutput, error) {
 	return views, nil
 }
 
-func (v View) Create(view model.View) (*uuid.UUID, error) {
+func (v View) Create(view model.View) (*model.CreateOutput, error) {
 	id, err := v.storage.CreateStorage(view)
 	if err != nil {
 		return nil, fmt.Errorf("view.storage.Create(): %w", err)
 	}
-
-	return id, nil
+	var m model.CreateOutput
+	m.Id = id
+	return &m, nil
 }
 
-func (v View) Update(id uuid.UUID, view model.View) (bool, error) {
-	created, err := v.storage.UpdateStorage(id, view)
+func (v View) Update(id uuid.UUID, view model.View) (*model.UpdateOutput, error) {
+	updated, err := v.storage.UpdateStorage(id, view)
 	if err != nil {
-		return false, fmt.Errorf("view.storage.Update(): %w", err)
+		return nil, fmt.Errorf("view.storage.Update(): %w", err)
 	}
-
-	return created, nil
+	var m model.UpdateOutput
+	m.Updated = updated
+	return &m, nil
 }
 
 func (v View) Delete(id uuid.UUID) (bool, error) {

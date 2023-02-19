@@ -82,7 +82,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -281,7 +281,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -324,7 +324,7 @@
         }
       }
     },
-    "/userRole/users/{userID}": {
+    "/userRole/user/{userID}": {
       "get": {
         "operationId": "getUserRoles",
         "tags": [
@@ -491,12 +491,12 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/IdOutput"
+                  "$ref": "#/components/schemas/AssignedBoolOutput"
                 }
               }
             }
@@ -563,7 +563,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -676,7 +676,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -745,7 +745,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/IdOutput"
+                  "$ref": "#/components/schemas/Role"
                 }
               }
             }
@@ -875,7 +875,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -988,7 +988,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -1195,7 +1195,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -1308,7 +1308,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -1507,7 +1507,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -1620,7 +1620,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -1689,7 +1689,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/View"
+                  "$ref": "#/components/schemas/View_second_level"
                 }
               }
             }
@@ -1819,7 +1819,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -1932,7 +1932,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -2131,7 +2131,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "OK",
             "content": {
               "application/json": {
@@ -2263,8 +2263,8 @@
             "description": "icon del modulo"
           },
           "order": {
-            "type": "string",
-            "example": "black",
+            "type": "integer",
+            "example": 1,
             "description": "order de visualizacion del modulo"
           }
         }
@@ -2288,8 +2288,8 @@
             "description": "icon del modulo"
           },
           "order": {
-            "type": "string",
-            "example": "order",
+            "type": "integer",
+            "example": 1,
             "description": "order de visualizacion del modulo"
           }
         }
@@ -2353,8 +2353,8 @@
             "description": "description del role."
           },
           "order": {
-            "type": "string",
-            "example": "black",
+            "type": "integer",
+            "example": 1,
             "description": "order de visualizacion del role"
           }
         }
@@ -2373,8 +2373,8 @@
             "description": "description del role."
           },
           "order": {
-            "type": "string",
-            "example": "order",
+            "type": "integer",
+            "example": 1,
             "description": "order de visualizacion del role"
           }
         }
@@ -2436,7 +2436,7 @@
         "type": "array",
         "description": "Lista de modulos.",
         "items": {
-          "$ref": "#/components/schemas/UserRole"
+          "$ref": "#/components/schemas/RoleView"
         }
       },
       "View": {
@@ -2448,6 +2448,41 @@
             "description": "id del view."
           },
           "module_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del module."
+          },
+          "name": {
+            "type": "string",
+            "example": "name",
+            "description": "name."
+          },
+          "description": {
+            "type": "string",
+            "example": "description",
+            "description": "description del view."
+          },
+          "url": {
+            "type": "string",
+            "example": "url",
+            "description": "url de visualizacion del view"
+          },
+          "icon": {
+            "type": "string",
+            "example": "icon",
+            "description": "icon del view"
+          }
+        }
+      },
+      "View_second_level": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del view."
+          },
+          "module": {
             "$ref": "#/components/schemas/Module"
           },
           "name": {
@@ -2506,7 +2541,7 @@
         "type": "array",
         "description": "Lista de views.",
         "items": {
-          "$ref": "#/components/schemas/View"
+          "$ref": "#/components/schemas/View_second_level"
         }
       },
       "Property": {
@@ -2517,7 +2552,7 @@
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "description": "id del property."
           },
-          "user_id": {
+          "user": {
             "$ref": "#/components/schemas/User"
           },
           "description": {
@@ -2622,7 +2657,17 @@
       "BoolOutput": {
         "type": "object",
         "properties": {
-          "id": {
+          "updated": {
+            "type": "boolean",
+            "example": true,
+            "description": "boolean response."
+          }
+        }
+      },
+      "AssignedBoolOutput": {
+        "type": "object",
+        "properties": {
+          "assigned": {
             "type": "boolean",
             "example": true,
             "description": "boolean response."
@@ -2633,12 +2678,7 @@
         "type": "object",
         "description": "Object of response error",
         "properties": {
-          "code": {
-            "type": "string",
-            "description": "custom code of response",
-            "example": "INTERNAL_SERVER_ERROR"
-          },
-          "message": {
+          "error": {
             "type": "string",
             "description": "message of response",
             "example": "An internal server error has occurred."
@@ -2649,21 +2689,10 @@
         "type": "object",
         "description": "Object of response error",
         "properties": {
-          "code": {
+          "error": {
             "type": "string",
             "description": "custom code of response",
             "example": "BAD_REQUEST"
-          },
-          "message": {
-            "type": "string",
-            "description": "message of response",
-            "example": "Request is not well-formed, syntactically incorrect, or violates schema."
-          },
-          "details": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/EntityDetail"
-            }
           }
         }
       },
@@ -2671,21 +2700,10 @@
         "type": "object",
         "description": "Object of response error",
         "properties": {
-          "code": {
+          "error": {
             "type": "string",
             "description": "custom code of response",
             "example": "UNPROCESSABLE_ENTITY"
-          },
-          "message": {
-            "type": "string",
-            "description": "message of response",
-            "example": "The requested action could not be performed, semantically incorrect, or failed business validation."
-          },
-          "details": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/EntityDetail"
-            }
           }
         }
       },

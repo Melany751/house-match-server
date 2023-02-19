@@ -6,9 +6,9 @@ import (
 )
 
 type UseCaseModule interface {
-	GetById(id uuid.UUID) (*model.Property, error)
-	GetAll() (model.Properties, error)
-	Create(m model.Property) (*uuid.UUID, error)
-	Update(id uuid.UUID, model model.Property) (bool, error)
+	GetById(id uuid.UUID) (*model.PropertyOutput, error)
+	GetAll() (model.PropertiesOutput, error)
+	Create(m model.Property) (*model.CreateOutput, error)
+	Update(id uuid.UUID, model model.Property) (*model.UpdateOutput, error)
 	Delete(id uuid.UUID) (bool, error)
 }

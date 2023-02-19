@@ -1,7 +1,6 @@
 package user
 
 import (
-	"errors"
 	"fmt"
 	"github.com/Melany751/house-match-server/application/repository/storage/user"
 	"github.com/Melany751/house-match-server/domain/model"
@@ -37,7 +36,8 @@ func (u User) GetAll() (model.Users, error) {
 func (u User) Create(user model.User) (*model.CreateOutput, error) {
 	id, err := u.storage.CreateStorage(user)
 	if err != nil {
-		return nil, errors.New("user.use.Create(): %s" + err.Error())
+		return nil, fmt.Errorf("user.use.Create(): %w", err)
+		//return nil, fmt.Errorf("user.use.Create(): %s", err.Error())
 	}
 
 	var m model.CreateOutput
@@ -46,20 +46,25 @@ func (u User) Create(user model.User) (*model.CreateOutput, error) {
 	return &m, nil
 }
 
-func (u User) Update(id uuid.UUID, user model.User) (bool, error) {
+func (u User) Update(id uuid.UUID, user model.User) (*model.UpdateOutput, error) {
 	created, err := u.storage.UpdateStorage(id, user)
 	if err != nil {
-		return false, fmt.Errorf("user.storage.Update(): %w", err)
+		return nil, fmt.Errorf("user.storage.Update(): %w", err)
 	}
+	var m model.UpdateOutput
+	m.Updated = created
 
-	return created, nil
+	return &m, nil
 }
 
-func (u User) Delete(id uuid.UUID) (bool, error) {
+func (u User) Delete(id uuid.UUID) (*model.DeleteOutput, error) {
 	deleted, err := u.storage.DeleteStorage(id)
 	if err != nil {
-		return false, fmt.Errorf("user.storage.Delete(): %w", err)
+		return nil, fmt.Errorf("user.storage.Delete(): %w", err)
 	}
 
-	return deleted, nil
+	var m model.DeleteOutput
+	m.Deleted = deleted
+
+	return &m, nil
 }

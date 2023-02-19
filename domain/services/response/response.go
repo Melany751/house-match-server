@@ -27,3 +27,11 @@ func Deleted(data any) (int, any) {
 func NoContent() (int, any) {
 	return http.StatusNoContent, nil
 }
+
+func Wrong(err any) (int, any) {
+	return 500, err
+}
+
+func BadRequest(err any) (int, any) {
+	return 400, err
+}
