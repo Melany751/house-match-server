@@ -20,6 +20,7 @@ go.work
 ## Directory-based project format:
 .idea/
 /*.iml
+scripts/.idea
 
 ## File-based project format:
 *.ipr

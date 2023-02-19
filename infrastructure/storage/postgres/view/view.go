@@ -25,7 +25,7 @@ var (
     	m.icon,
     	m."order"
 		from domain.views v inner join domain.modules m on m.id = v.module_id WHERE v.id = $1;`
-	_psqlGetAll = `SELECT v.id,p INNER JOIN domain.users u ON p.user_id=u.id
+	_psqlGetAll = `SELECT v.id,
     	v.name,
     	v.description,
     	v.url,

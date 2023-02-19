@@ -71,3 +71,12 @@ create table domain.properties
     floor            int                            not null,
     number_of_floors int
 );
+
+CREATE TABLE domain.location_person
+(
+    id       uuid default gen_random_uuid() not null primary key unique,
+    country  varchar                        not null,
+    city     varchar                        not null,
+    province varchar,
+    district varchar
+);

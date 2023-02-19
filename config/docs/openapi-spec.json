@@ -26,7 +26,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Users"
+                  "$ref": "#/components/schemas/UsersSecondLevel"
                 }
               }
             }
@@ -151,7 +151,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/UserSecondLevel"
                 }
               }
             }
@@ -267,6 +267,318 @@
           "Users"
         ],
         "summary": "User delete",
+        "description": "Esta operación permite eliminar un usuario.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoolOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/persons": {
+      "get": {
+        "operationId": "getPersons",
+        "tags": [
+          "Persons"
+        ],
+        "summary": "Person list",
+        "description": "Esta operación permite listar todos los persons.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonsSecondLevel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createPerson",
+        "tags": [
+          "Persons"
+        ],
+        "summary": "Create Person",
+        "description": "Esta operacion permite crear un usuario.",
+        "requestBody": {
+          "description": "Cuerpo del mensaje para crear el usuario.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/persons/{id}": {
+      "get": {
+        "operationId": "getPerson",
+        "tags": [
+          "Persons"
+        ],
+        "summary": "Person list",
+        "description": "Esta operación permite listar un usuario.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonSecondLevel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updatePerson",
+        "tags": [
+          "Persons"
+        ],
+        "summary": "Person update",
+        "description": "Esta operación permite actualizar un usuario.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "Cuerpo del mensaje para actualizar el usuario.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoolOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deletePerson",
+        "tags": [
+          "Persons"
+        ],
+        "summary": "Person delete",
         "description": "Esta operación permite eliminar un usuario.",
         "parameters": [
           {
@@ -1564,7 +1876,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Views"
+                  "$ref": "#/components/schemas/ViewsSecondLevel"
                 }
               }
             }
@@ -1689,7 +2001,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/View_second_level"
+                  "$ref": "#/components/schemas/ViewSecondLevel"
                 }
               }
             }
@@ -2173,11 +2485,353 @@
           }
         }
       }
+    },
+    "/locationPersons": {
+      "get": {
+        "operationId": "getLocationPersons",
+        "tags": [
+          "LocationPersons"
+        ],
+        "summary": "LocationPerson list",
+        "description": "Esta operación permite listar todos los locationPersons.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationPersons"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createLocationPerson",
+        "tags": [
+          "LocationPersons"
+        ],
+        "summary": "Create LocationPerson",
+        "description": "Esta operacion permite crear un LocationPerson.",
+        "requestBody": {
+          "description": "Cuerpo del mensaje para crear el LocationPerson.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationPersonInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/locationPersons/{id}": {
+      "get": {
+        "operationId": "getLocationPerson",
+        "tags": [
+          "LocationPersons"
+        ],
+        "summary": "LocationPerson list",
+        "description": "Esta operación permite listar un LocationPerson.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationPerson"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateLocationPerson",
+        "tags": [
+          "LocationPersons"
+        ],
+        "summary": "LocationPerson update",
+        "description": "Esta operación permite actualizar un LocationPerson.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "Cuerpo del mensaje para actualizar el LocationPerson.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationPersonInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoolOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteLocationPerson",
+        "tags": [
+          "LocationPersons"
+        ],
+        "summary": "LocationPerson delete",
+        "description": "Esta operación permite eliminar un LocationPerson.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoolOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
       "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "ID del usuario."
+          },
+          "user": {
+            "type": "string",
+            "example": "user",
+            "description": "Usuario o nick."
+          },
+          "password": {
+            "type": "string",
+            "example": "password",
+            "description": "Password del usuario."
+          },
+          "email": {
+            "type": "string",
+            "example": "email@email.com",
+            "description": "Email del usuario"
+          },
+          "theme": {
+            "type": "string",
+            "example": "black",
+            "description": "Tema de visualizacion del usuario"
+          }
+        }
+      },
+      "UserSecondLevel": {
         "type": "object",
         "properties": {
           "id": {
@@ -2237,6 +2891,200 @@
         "description": "Lista de usuarios.",
         "items": {
           "$ref": "#/components/schemas/User"
+        }
+      },
+      "UsersSecondLevel": {
+        "type": "array",
+        "description": "Lista de usuarios.",
+        "items": {
+          "$ref": "#/components/schemas/UserSecondLevel"
+        }
+      },
+      "Person": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "ID del person."
+          },
+          "document_type": {
+            "type": "string",
+            "example": "document_type",
+            "description": "document_type o nick."
+          },
+          "document": {
+            "type": "string",
+            "example": "document",
+            "description": "document del person."
+          },
+          "names": {
+            "type": "string",
+            "example": "names",
+            "description": "names del person"
+          },
+          "m_lastname": {
+            "type": "string",
+            "example": "m_lastname",
+            "description": "m_lastname del person"
+          },
+          "phone": {
+            "type": "string",
+            "example": "987654321",
+            "description": "phone o nick."
+          },
+          "gender": {
+            "type": "string",
+            "example": "m",
+            "description": "gender del person."
+          },
+          "marital_status": {
+            "type": "string",
+            "example": "marital_status",
+            "description": "marital_status del person"
+          },
+          "address": {
+            "type": "string",
+            "example": "address",
+            "description": "address del person"
+          },
+          "date_birth": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_birth del person"
+          },
+          "location_person_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del location person."
+          }
+        }
+      },
+      "PersonSecondLevel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "ID del person."
+          },
+          "document_type": {
+            "type": "string",
+            "example": "document_type",
+            "description": "document_type o nick."
+          },
+          "document": {
+            "type": "string",
+            "example": "document",
+            "description": "document del person."
+          },
+          "names": {
+            "type": "string",
+            "example": "names",
+            "description": "names del person"
+          },
+          "m_lastname": {
+            "type": "string",
+            "example": "black",
+            "description": "m_lastname del person"
+          },
+          "phone": {
+            "type": "string",
+            "example": "987654321",
+            "description": "phone o nick."
+          },
+          "gender": {
+            "type": "string",
+            "example": "m",
+            "description": "gender del person."
+          },
+          "marital_status": {
+            "type": "string",
+            "example": "marital_status",
+            "description": "marital_status del person"
+          },
+          "address": {
+            "type": "string",
+            "example": "address",
+            "description": "address del person"
+          },
+          "date_birth": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_birth del person"
+          },
+          "location_person": {
+            "$ref": "#/components/schemas/LocationPerson"
+          }
+        }
+      },
+      "PersonInput": {
+        "type": "object",
+        "properties": {
+          "document_type": {
+            "type": "string",
+            "example": "document_type",
+            "description": "document_type o nick."
+          },
+          "document": {
+            "type": "string",
+            "example": "document",
+            "description": "document del person."
+          },
+          "names": {
+            "type": "string",
+            "example": "names",
+            "description": "names del person"
+          },
+          "m_lastname": {
+            "type": "string",
+            "example": "black",
+            "description": "m_lastname del person"
+          },
+          "phone": {
+            "type": "string",
+            "example": "987654321",
+            "description": "phone o nick."
+          },
+          "gender": {
+            "type": "string",
+            "example": "m",
+            "description": "gender del person."
+          },
+          "marital_status": {
+            "type": "string",
+            "example": "marital_status",
+            "description": "marital_status del person"
+          },
+          "address": {
+            "type": "string",
+            "example": "address",
+            "description": "address del person"
+          },
+          "date_birth": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_birth del person"
+          },
+          "location_person_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del location person."
+          }
+        }
+      },
+      "Persons": {
+        "type": "array",
+        "description": "Lista de persons.",
+        "items": {
+          "$ref": "#/components/schemas/Person"
+        }
+      },
+      "PersonsSecondLevel": {
+        "type": "array",
+        "description": "Lista de persons.",
+        "items": {
+          "$ref": "#/components/schemas/PersonSecondLevel"
         }
       },
       "Module": {
@@ -2474,7 +3322,7 @@
           }
         }
       },
-      "View_second_level": {
+      "ViewSecondLevel": {
         "type": "object",
         "properties": {
           "id": {
@@ -2541,7 +3389,76 @@
         "type": "array",
         "description": "Lista de views.",
         "items": {
-          "$ref": "#/components/schemas/View_second_level"
+          "$ref": "#/components/schemas/View"
+        }
+      },
+      "ViewsSecondLevel": {
+        "type": "array",
+        "description": "Lista de views.",
+        "items": {
+          "$ref": "#/components/schemas/ViewSecondLevel"
+        }
+      },
+      "LocationPerson": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "ID del LocationPerson."
+          },
+          "country": {
+            "type": "string",
+            "example": "country",
+            "description": "Country."
+          },
+          "city": {
+            "type": "string",
+            "example": "city",
+            "description": "city."
+          },
+          "province": {
+            "type": "string",
+            "example": "province",
+            "description": "province"
+          },
+          "district": {
+            "type": "string",
+            "example": "district",
+            "description": "district"
+          }
+        }
+      },
+      "LocationPersonInput": {
+        "type": "object",
+        "properties": {
+          "country": {
+            "type": "string",
+            "example": "country",
+            "description": "Country."
+          },
+          "city": {
+            "type": "string",
+            "example": "city",
+            "description": "city."
+          },
+          "province": {
+            "type": "string",
+            "example": "province",
+            "description": "province"
+          },
+          "district": {
+            "type": "string",
+            "example": "district",
+            "description": "district"
+          }
+        }
+      },
+      "LocationPersons": {
+        "type": "array",
+        "description": "Lista de LocationPersons.",
+        "items": {
+          "$ref": "#/components/schemas/LocationPerson"
         }
       },
       "Property": {
