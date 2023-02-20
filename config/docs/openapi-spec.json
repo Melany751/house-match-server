@@ -2828,6 +2828,11 @@
             "type": "string",
             "example": "black",
             "description": "Tema de visualizacion del usuario"
+          },
+          "person_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "ID del person."
           }
         }
       },
@@ -2858,6 +2863,9 @@
             "type": "string",
             "example": "black",
             "description": "Tema de visualizacion del usuario"
+          },
+          "person": {
+            "$ref": "#/components/schemas/Person"
           }
         }
       },
@@ -2883,6 +2891,11 @@
             "type": "string",
             "example": "black",
             "description": "Tema de visualizacion del usuario"
+          },
+          "person_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "ID del person."
           }
         }
       },

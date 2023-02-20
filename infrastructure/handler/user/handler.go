@@ -27,7 +27,7 @@ func (h handler) getById(c *gin.Context) {
 
 	m, err := h.useCase.GetById(uid)
 	if err != nil {
-		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
+		c.JSON(response.Wrong(model.ResponseError{Error: err.Error()}))
 		return
 	}
 	c.JSON(response.OK(m))
@@ -36,7 +36,7 @@ func (h handler) getById(c *gin.Context) {
 func (h handler) getAll(c *gin.Context) {
 	ms, err := h.useCase.GetAll()
 	if err != nil {
-		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
+		c.JSON(response.Wrong(model.ResponseError{Error: err.Error()}))
 		return
 	}
 	c.JSON(response.OK(ms))
@@ -44,14 +44,16 @@ func (h handler) getAll(c *gin.Context) {
 
 func (h handler) create(c *gin.Context) {
 	var req model.User
+	fmt.Println(req)
 	if err := c.BindJSON(&req); err != nil {
-		c.JSON(response.BadRequest(model.ResponseError{fmt.Sprintf("Error read body, error: %s", err.Error())}))
+		c.JSON(response.BadRequest(model.ResponseError{Error: fmt.Sprintf("Error read body, error: %s", err.Error())}))
 		return
 	}
+	fmt.Println(req)
 
 	m, err := h.useCase.Create(req)
 	if err != nil {
-		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
+		c.JSON(response.Wrong(model.ResponseError{Error: err.Error()}))
 		return
 	}
 
@@ -68,13 +70,13 @@ func (h handler) update(c *gin.Context) {
 
 	var req model.User
 	if err := c.BindJSON(&req); err != nil {
-		c.JSON(response.BadRequest(model.ResponseError{fmt.Sprintf("Error read body, error: %s", err.Error())}))
+		c.JSON(response.BadRequest(model.ResponseError{Error: fmt.Sprintf("Error read body, error: %s", err.Error())}))
 		return
 	}
 
 	created, err := h.useCase.Update(uid, req)
 	if err != nil {
-		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
+		c.JSON(response.Wrong(model.ResponseError{Error: err.Error()}))
 		return
 	}
 

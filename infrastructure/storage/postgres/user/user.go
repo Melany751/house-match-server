@@ -14,11 +14,46 @@ const (
 )
 
 var (
-	_psqlGetById = `SELECT * FROM domain.users WHERE id = $1`
-	_psqlGetAll  = `SELECT * FROM domain.users`
-	_psqlInsert  = `INSERT INTO domain.users (id, "user", "password", "email", "theme") VALUES ($1, $2, $3, $4, $5)`
-	_psqlUpdate  = `UPDATE domain.users SET "user"=$2, "password"=$3, "email"=$4, "theme"=$5 WHERE id=$1`
-	_psqlDelete  = `DELETE FROM domain.users WHERE id=$1`
+	_psqlGetById = `SELECT u.id,
+       				u.user,
+       				u.password,
+       				u.email,
+       				u.theme,
+       				p.id,
+       				p.document_type,
+       				p.document,
+       				p.names,
+       				p.lastname,
+       				p.m_lastname,
+       				p.phone,
+       				p.gender,
+       				p.marital_status,
+       				p.address,
+       				p.date_birth,
+       				p.location_person_id
+				FROM domain.users u INNER JOIN domain.persons p ON p.id = u.person_id
+				WHERE u.id = $1`
+	_psqlGetAll = `SELECT u.id,
+				       u.user,
+				       u.password,
+				       u.email,
+				       u.theme,
+				       p.id,
+				       p.document_type,
+				       p.document,
+				       p.names,
+				       p.lastname,
+				       p.m_lastname,
+				       p.phone,
+				       p.gender,
+				       p.marital_status,
+				       p.address,
+				       p.date_birth,
+				       p.location_person_id
+				FROM domain.users u INNER JOIN domain.persons p ON p.id = u.person_id`
+	_psqlInsert = `INSERT INTO domain.users (id, "user", "password", "email", "theme", "person_id") VALUES ($1, $2, $3, $4, $5, $6)`
+	_psqlUpdate = `UPDATE domain.users SET "user"=$2, "password"=$3, "email"=$4, "theme"=$5, "person_id"=$6 WHERE id=$1`
+	_psqlDelete = `DELETE FROM domain.users WHERE id=$1`
 )
 
 type User struct {
@@ -29,7 +64,7 @@ func New(db *sql.DB) User {
 	return User{db}
 }
 
-func (u User) GetByIdStorage(id uuid.UUID) (*model.User, error) {
+func (u User) GetByIdStorage(id uuid.UUID) (*model.UserOutput, error) {
 	args := []any{id}
 
 	stmt, err := u.db.Prepare(_psqlGetById)
@@ -38,7 +73,7 @@ func (u User) GetByIdStorage(id uuid.UUID) (*model.User, error) {
 	}
 	defer stmt.Close()
 
-	m, err := u.scanRow(stmt.QueryRow(args...))
+	m, err := u.scanRowWithPerson(stmt.QueryRow(args...))
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +81,7 @@ func (u User) GetByIdStorage(id uuid.UUID) (*model.User, error) {
 	return &m, nil
 }
 
-func (u User) GetAllStorage() (model.Users, error) {
+func (u User) GetAllStorage() (model.UsersOutput, error) {
 	stmt, err := u.db.Prepare(_psqlGetAll)
 	if err != nil {
 		return nil, err
@@ -59,11 +94,11 @@ func (u User) GetAllStorage() (model.Users, error) {
 	}
 	defer rows.Close()
 
-	var ms model.Users
-	var m model.User
+	var ms model.UsersOutput
+	var m model.UserOutput
 
 	for rows.Next() {
-		m, err = u.scanRow(rows)
+		m, err = u.scanRowWithPerson(rows)
 		if err != nil {
 			break
 		}
@@ -164,6 +199,35 @@ func (u User) scanRow(s pgx.Row) (model.User, error) {
 	)
 	if err != nil {
 		return model.User{}, err
+	}
+
+	return m, nil
+}
+
+func (u User) scanRowWithPerson(s pgx.Row) (model.UserOutput, error) {
+	m := model.UserOutput{}
+
+	err := s.Scan(
+		&m.ID,
+		&m.User,
+		&m.Password,
+		&m.Email,
+		&m.Theme,
+		&m.Person.ID,
+		&m.Person.DocumentType,
+		&m.Person.Document,
+		&m.Person.Names,
+		&m.Person.Lastname,
+		&m.Person.MLastname,
+		&m.Person.Phone,
+		&m.Person.Gender,
+		&m.Person.MaritalStatus,
+		&m.Person.Address,
+		&m.Person.DateBirth,
+		&m.Person.LocationPersonID,
+	)
+	if err != nil {
+		return model.UserOutput{}, err
 	}
 
 	return m, nil
