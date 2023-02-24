@@ -15,7 +15,7 @@ func New(storage locationperson.StorageLocationPerson) LocationPerson {
 	return LocationPerson{storage}
 }
 
-func (u LocationPerson) GetById(id uuid.UUID) (*model.LocationPerson, error) {
+func (u LocationPerson) GetById(id uuid.UUID) (*model.Location, error) {
 	user, err := u.storage.GetByIdStorage(id)
 	if err != nil {
 		return nil, fmt.Errorf("locationPerson.storage.GetById(): %w", err)
@@ -24,7 +24,7 @@ func (u LocationPerson) GetById(id uuid.UUID) (*model.LocationPerson, error) {
 	return user, nil
 }
 
-func (u LocationPerson) GetAll() (model.LocationPersons, error) {
+func (u LocationPerson) GetAll() (model.Locations, error) {
 	users, err := u.storage.GetAllStorage()
 	if err != nil {
 		return nil, fmt.Errorf("locationPerson.storage.GetAll(): %w", err)
@@ -33,7 +33,7 @@ func (u LocationPerson) GetAll() (model.LocationPersons, error) {
 	return users, nil
 }
 
-func (u LocationPerson) Create(user model.LocationPerson) (*model.CreateOutput, error) {
+func (u LocationPerson) Create(user model.Location) (*model.CreateOutput, error) {
 	id, err := u.storage.CreateStorage(user)
 	if err != nil {
 		return nil, fmt.Errorf("locationPerson.use.Create(): %w", err)
@@ -46,7 +46,7 @@ func (u LocationPerson) Create(user model.LocationPerson) (*model.CreateOutput, 
 	return &m, nil
 }
 
-func (u LocationPerson) Update(id uuid.UUID, user model.LocationPerson) (*model.UpdateOutput, error) {
+func (u LocationPerson) Update(id uuid.UUID, user model.Location) (*model.UpdateOutput, error) {
 	created, err := u.storage.UpdateStorage(id, user)
 	if err != nil {
 		return nil, fmt.Errorf("locationPerson.storage.Update(): %w", err)

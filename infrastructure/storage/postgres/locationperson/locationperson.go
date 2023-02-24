@@ -29,7 +29,7 @@ func New(db *sql.DB) LocationPerson {
 	return LocationPerson{db}
 }
 
-func (u LocationPerson) GetByIdStorage(id uuid.UUID) (*model.LocationPerson, error) {
+func (u LocationPerson) GetByIdStorage(id uuid.UUID) (*model.Location, error) {
 	args := []any{id}
 
 	stmt, err := u.db.Prepare(_psqlGetById)
@@ -46,7 +46,7 @@ func (u LocationPerson) GetByIdStorage(id uuid.UUID) (*model.LocationPerson, err
 	return &m, nil
 }
 
-func (u LocationPerson) GetAllStorage() (model.LocationPersons, error) {
+func (u LocationPerson) GetAllStorage() (model.Locations, error) {
 	stmt, err := u.db.Prepare(_psqlGetAll)
 	if err != nil {
 		return nil, err
@@ -59,8 +59,8 @@ func (u LocationPerson) GetAllStorage() (model.LocationPersons, error) {
 	}
 	defer rows.Close()
 
-	var ms model.LocationPersons
-	var m model.LocationPerson
+	var ms model.Locations
+	var m model.Location
 
 	for rows.Next() {
 		m, err = u.scanRow(rows)
@@ -73,7 +73,7 @@ func (u LocationPerson) GetAllStorage() (model.LocationPersons, error) {
 	return ms, nil
 }
 
-func (u LocationPerson) CreateStorage(locationPerson model.LocationPerson) (*uuid.UUID, error) {
+func (u LocationPerson) CreateStorage(locationPerson model.Location) (*uuid.UUID, error) {
 	newId, err := uuid.NewUUID()
 	if err != nil {
 		fmt.Printf("Error generate UUID: %s\n", err)
@@ -96,7 +96,7 @@ func (u LocationPerson) CreateStorage(locationPerson model.LocationPerson) (*uui
 	return &newId, nil
 }
 
-func (u LocationPerson) UpdateStorage(id uuid.UUID, locationPerson model.LocationPerson) (bool, error) {
+func (u LocationPerson) UpdateStorage(id uuid.UUID, locationPerson model.Location) (bool, error) {
 	locationPerson.ID = id
 
 	args := u.readModelLocationPerson(locationPerson)
@@ -142,7 +142,7 @@ func (u LocationPerson) DeleteStorage(id uuid.UUID) (bool, error) {
 	return true, nil
 }
 
-func (u LocationPerson) readModelLocationPerson(locationPerson model.LocationPerson) []any {
+func (u LocationPerson) readModelLocationPerson(locationPerson model.Location) []any {
 	v := reflect.ValueOf(locationPerson)
 	values := make([]interface{}, v.NumField())
 	for i := 0; i < v.NumField(); i++ {
@@ -152,8 +152,8 @@ func (u LocationPerson) readModelLocationPerson(locationPerson model.LocationPer
 	return values
 }
 
-func (u LocationPerson) scanRow(s pgx.Row) (model.LocationPerson, error) {
-	m := model.LocationPerson{}
+func (u LocationPerson) scanRow(s pgx.Row) (model.Location, error) {
+	m := model.Location{}
 
 	err := s.Scan(
 		&m.ID,
@@ -163,7 +163,7 @@ func (u LocationPerson) scanRow(s pgx.Row) (model.LocationPerson, error) {
 		&m.District,
 	)
 	if err != nil {
-		return model.LocationPerson{}, err
+		return model.Location{}, err
 	}
 
 	return m, nil

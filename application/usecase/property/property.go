@@ -15,7 +15,7 @@ func New(storage property.StorageProperty) Property {
 	return Property{storage}
 }
 
-func (p Property) GetById(id uuid.UUID) (*model.PropertyOutput, error) {
+func (p Property) GetById(id uuid.UUID) (*model.PropertySecondLevel, error) {
 	property, err := p.storage.GetStorageById(id)
 	if err != nil {
 		return nil, fmt.Errorf("property.storage.GetById(): %w", err)
@@ -24,7 +24,7 @@ func (p Property) GetById(id uuid.UUID) (*model.PropertyOutput, error) {
 	return property, nil
 }
 
-func (p Property) GetAll() (model.PropertiesOutput, error) {
+func (p Property) GetAll() (model.PropertiesSecondLevel, error) {
 	properties, err := p.storage.GetStorageAll()
 	if err != nil {
 		return nil, fmt.Errorf("property.storage.GetAll(): %w", err)

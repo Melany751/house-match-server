@@ -57,7 +57,7 @@ func New(db *sql.DB) Property {
 	return Property{db}
 }
 
-func (p Property) GetStorageById(id uuid.UUID) (*model.PropertyOutput, error) {
+func (p Property) GetStorageById(id uuid.UUID) (*model.PropertySecondLevel, error) {
 	args := []any{id}
 
 	stmt, err := p.db.Prepare(_psqlGetById)
@@ -74,7 +74,7 @@ func (p Property) GetStorageById(id uuid.UUID) (*model.PropertyOutput, error) {
 	return &m, nil
 }
 
-func (p Property) GetStorageAll() (model.PropertiesOutput, error) {
+func (p Property) GetStorageAll() (model.PropertiesSecondLevel, error) {
 	stmt, err := p.db.Prepare(_psqlGetAll)
 	if err != nil {
 		return nil, err
@@ -87,8 +87,8 @@ func (p Property) GetStorageAll() (model.PropertiesOutput, error) {
 	}
 	defer rows.Close()
 
-	var ms model.PropertiesOutput
-	var m model.PropertyOutput
+	var ms model.PropertiesSecondLevel
+	var m model.PropertySecondLevel
 
 	for rows.Next() {
 		m, err = p.scanRowWithUser(rows)
@@ -201,8 +201,8 @@ func (p Property) scanRow(s pgx.Row) (model.Property, error) {
 	return m, nil
 }
 
-func (p Property) scanRowWithUser(s pgx.Row) (model.PropertyOutput, error) {
-	m := model.PropertyOutput{}
+func (p Property) scanRowWithUser(s pgx.Row) (model.PropertySecondLevel, error) {
+	m := model.PropertySecondLevel{}
 	err := s.Scan(
 		&m.ID,
 		&m.Description,
@@ -219,7 +219,7 @@ func (p Property) scanRowWithUser(s pgx.Row) (model.PropertyOutput, error) {
 		&m.User.Theme,
 	)
 	if err != nil {
-		return model.PropertyOutput{}, err
+		return model.PropertySecondLevel{}, err
 	}
 
 	return m, nil

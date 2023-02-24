@@ -1,4 +1,4 @@
-package locationperson
+package location
 
 import (
 	useCaseLocationPerson "github.com/Melany751/house-match-server/application/usecase/locationperson"
@@ -20,7 +20,7 @@ func buildHandler(specification model.RouterSpecification) handler {
 }
 
 func publicRoutes(api *gin.Engine, h handler, middlewares ...gin.HandlerFunc) {
-	routes := api.Group("v1/locationPersons", middlewares...)
+	routes := api.Group("v1/locations", middlewares...)
 
 	routes.GET("/:id", h.getById)
 	routes.GET("", h.getAll)

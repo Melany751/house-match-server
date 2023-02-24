@@ -1,19 +1,19 @@
-package locationperson
+package location
 
 import (
 	"fmt"
 	"github.com/Melany751/house-match-server/domain/model"
-	"github.com/Melany751/house-match-server/domain/services/locationperson"
+	"github.com/Melany751/house-match-server/domain/services/location"
 	"github.com/Melany751/house-match-server/domain/services/response"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
 type handler struct {
-	useCase locationperson.UseCaseLocationPerson
+	useCase location.UseCaseLocation
 }
 
-func newHandler(useCase locationperson.UseCaseLocationPerson) handler {
+func newHandler(useCase location.UseCaseLocation) handler {
 	return handler{useCase}
 }
 
@@ -43,7 +43,7 @@ func (h handler) getAll(c *gin.Context) {
 }
 
 func (h handler) create(c *gin.Context) {
-	var req model.LocationPerson
+	var req model.Location
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(response.BadRequest(model.ResponseError{Error: fmt.Sprintf("Error read body, error: %s", err.Error())}))
 		return
@@ -66,7 +66,7 @@ func (h handler) update(c *gin.Context) {
 		return
 	}
 
-	var req model.LocationPerson
+	var req model.Location
 	if err := c.BindJSON(&req); err != nil {
 		c.JSON(response.BadRequest(model.ResponseError{Error: fmt.Sprintf("Error read body, error: %s", err.Error())}))
 		return

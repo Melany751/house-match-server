@@ -6,9 +6,9 @@ import (
 )
 
 type StorageLocationPerson interface {
-	GetByIdStorage(id uuid.UUID) (*model.LocationPerson, error)
-	GetAllStorage() (model.LocationPersons, error)
-	CreateStorage(m model.LocationPerson) (*uuid.UUID, error)
-	UpdateStorage(id uuid.UUID, user model.LocationPerson) (bool, error)
+	GetByIdStorage(id uuid.UUID) (*model.Location, error)
+	GetAllStorage() (model.Locations, error)
+	CreateStorage(m model.Location) (*uuid.UUID, error)
+	UpdateStorage(id uuid.UUID, user model.Location) (bool, error)
 	DeleteStorage(id uuid.UUID) (bool, error)
 }

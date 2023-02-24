@@ -2486,21 +2486,21 @@
         }
       }
     },
-    "/locationPersons": {
+    "/locations": {
       "get": {
-        "operationId": "getLocationPersons",
+        "operationId": "getLocations",
         "tags": [
-          "LocationPersons"
+          "Locations"
         ],
-        "summary": "LocationPerson list",
-        "description": "Esta operación permite listar todos los locationPersons.",
+        "summary": "Location list",
+        "description": "Esta operación permite listar todos los locations.",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LocationPersons"
+                  "$ref": "#/components/schemas/Locations"
                 }
               }
             }
@@ -2538,19 +2538,19 @@
         }
       },
       "post": {
-        "operationId": "createLocationPerson",
+        "operationId": "createLocation",
         "tags": [
-          "LocationPersons"
+          "Locations"
         ],
-        "summary": "Create LocationPerson",
-        "description": "Esta operacion permite crear un LocationPerson.",
+        "summary": "Create Location",
+        "description": "Esta operacion permite crear un Location.",
         "requestBody": {
-          "description": "Cuerpo del mensaje para crear el LocationPerson.",
+          "description": "Cuerpo del mensaje para crear el Location.",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LocationPersonInput"
+                "$ref": "#/components/schemas/LocationInput"
               }
             }
           }
@@ -2599,14 +2599,14 @@
         }
       }
     },
-    "/locationPersons/{id}": {
+    "/locations/{id}": {
       "get": {
-        "operationId": "getLocationPerson",
+        "operationId": "getLocation",
         "tags": [
-          "LocationPersons"
+          "Locations"
         ],
-        "summary": "LocationPerson list",
-        "description": "Esta operación permite listar un LocationPerson.",
+        "summary": "Location list",
+        "description": "Esta operación permite listar un Location.",
         "parameters": [
           {
             "name": "id",
@@ -2625,7 +2625,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LocationPerson"
+                  "$ref": "#/components/schemas/Location"
                 }
               }
             }
@@ -2663,12 +2663,12 @@
         }
       },
       "put": {
-        "operationId": "updateLocationPerson",
+        "operationId": "updateLocation",
         "tags": [
-          "LocationPersons"
+          "Locations"
         ],
-        "summary": "LocationPerson update",
-        "description": "Esta operación permite actualizar un LocationPerson.",
+        "summary": "Location update",
+        "description": "Esta operación permite actualizar un Location.",
         "parameters": [
           {
             "name": "id",
@@ -2682,12 +2682,12 @@
           }
         ],
         "requestBody": {
-          "description": "Cuerpo del mensaje para actualizar el LocationPerson.",
+          "description": "Cuerpo del mensaje para actualizar el Location.",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LocationPersonInput"
+                "$ref": "#/components/schemas/LocationInput"
               }
             }
           }
@@ -2736,12 +2736,12 @@
         }
       },
       "delete": {
-        "operationId": "deleteLocationPerson",
+        "operationId": "deleteLocation",
         "tags": [
-          "LocationPersons"
+          "Locations"
         ],
-        "summary": "LocationPerson delete",
-        "description": "Esta operación permite eliminar un LocationPerson.",
+        "summary": "Location delete",
+        "description": "Esta operación permite eliminar un Location.",
         "parameters": [
           {
             "name": "id",
@@ -2956,11 +2956,6 @@
             "example": "marital_status",
             "description": "marital_status del person"
           },
-          "address": {
-            "type": "string",
-            "example": "address",
-            "description": "address del person"
-          },
           "date_birth": {
             "type": "string",
             "example": "2023-02-19T06:46:57+00:00",
@@ -3016,18 +3011,13 @@
             "example": "marital_status",
             "description": "marital_status del person"
           },
-          "address": {
-            "type": "string",
-            "example": "address",
-            "description": "address del person"
-          },
           "date_birth": {
             "type": "string",
             "example": "2023-02-19T06:46:57+00:00",
             "description": "date_birth del person"
           },
           "location_person": {
-            "$ref": "#/components/schemas/LocationPerson"
+            "$ref": "#/components/schemas/Location"
           }
         }
       },
@@ -3412,13 +3402,13 @@
           "$ref": "#/components/schemas/ViewSecondLevel"
         }
       },
-      "LocationPerson": {
+      "Location": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
-            "description": "ID del LocationPerson."
+            "description": "ID del Location."
           },
           "country": {
             "type": "string",
@@ -3439,10 +3429,15 @@
             "type": "string",
             "example": "district",
             "description": "district"
+          },
+          "address": {
+            "type": "string",
+            "example": "address",
+            "description": "address del person"
           }
         }
       },
-      "LocationPersonInput": {
+      "LocationInput": {
         "type": "object",
         "properties": {
           "country": {
@@ -3467,11 +3462,11 @@
           }
         }
       },
-      "LocationPersons": {
+      "Locations": {
         "type": "array",
-        "description": "Lista de LocationPersons.",
+        "description": "Lista de Locations.",
         "items": {
-          "$ref": "#/components/schemas/LocationPerson"
+          "$ref": "#/components/schemas/Location"
         }
       },
       "Property": {

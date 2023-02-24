@@ -18,7 +18,7 @@ type Property struct {
 
 type Properties []Property
 
-type PropertyOutput struct {
+type PropertySecondLevel struct {
 	ID            uuid.UUID `json:"id"`
 	User          User      `json:"user"`
 	Description   string    `json:"description"`
@@ -30,4 +30,4 @@ type PropertyOutput struct {
 	NumberOfFloor float64   `json:"number_of_floor"`
 }
 
-type PropertiesOutput []PropertyOutput
+type PropertiesSecondLevel []PropertySecondLevel

@@ -6,8 +6,8 @@ import (
 )
 
 type StorageProperty interface {
-	GetStorageById(id uuid.UUID) (*model.PropertyOutput, error)
-	GetStorageAll() (model.PropertiesOutput, error)
+	GetStorageById(id uuid.UUID) (*model.PropertySecondLevel, error)
+	GetStorageAll() (model.PropertiesSecondLevel, error)
 	CreateStorage(m model.Property) (*uuid.UUID, error)
 	UpdateStorage(id uuid.UUID, model model.Property) (bool, error)
 	DeleteStorage(id uuid.UUID) (bool, error)
