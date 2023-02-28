@@ -9,6 +9,8 @@ type Location struct {
 	Province string    `json:"province"`
 	District string    `json:"district"`
 	Address  string    `json:"address"`
+	Lat      float64   `json:"lat"`
+	Long     float64   `json:"long"`
 }
 
 type Locations []Location

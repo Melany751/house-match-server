@@ -23,7 +23,6 @@ var (
 				       p.phone,
 				       p.gender,
 				       p.marital_status,
-				       p.address,
 				       p.date_birth,
 				       lp.id,
 				       lp.country,
@@ -41,7 +40,6 @@ var (
 				       p.phone,
 				       p.gender,
 				       p.marital_status,
-				       p.address,
 				       p.date_birth,
 				       lp.id,
 				       lp.country,
@@ -49,8 +47,7 @@ var (
 				       lp.province,
 				       lp.district
 				FROM domain.persons p INNER JOIN domain.location_persons lp ON p.location_person_id = lp.id;`
-	_psqlInsert = `INSERT INTO domain.persons (id, document_type, document, names, lastname, m_lastname, phone, gender, marital_status,
-                            address, date_birth, location_person_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`
+	_psqlInsert = `INSERT INTO domain.persons (id, document_type, document, names, lastname, m_lastname, phone, gender, marital_status, date_birth,media_id, location_person_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`
 	_psqlUpdate = `UPDATE domain.persons SET "document_type"=$2, "document"=$3, "names"=$4, "lastname"=$5, "m_lastname"=$6, "phone"=$7, "gender"=$8, "marital_status"=$9, "address"=$10, "date_birth"=$11, "location_person_id"=$12 WHERE id=$1;`
 	_psqlDelete = `DELETE FROM domain.persons WHERE id=$1;`
 )
@@ -63,7 +60,7 @@ func New(db *sql.DB) Person {
 	return Person{db}
 }
 
-func (p Person) GetByIdStorage(id uuid.UUID) (*model.PersonOutput, error) {
+func (p Person) GetByIdStorage(id uuid.UUID) (*model.PersonSecondLevel, error) {
 	args := []any{id}
 
 	stmt, err := p.db.Prepare(_psqlGetById)
@@ -94,7 +91,7 @@ func (p Person) GetAllStorage() (model.PersonsOutput, error) {
 	defer rows.Close()
 
 	var ms model.PersonsOutput
-	var m model.PersonOutput
+	var m model.PersonSecondLevel
 
 	for rows.Next() {
 		m, err = p.scanRowWithLocation(rows)
@@ -199,9 +196,8 @@ func (p Person) scanRow(s pgx.Row) (model.Person, error) {
 		&m.Phone,
 		&m.Gender,
 		&m.MaritalStatus,
-		&m.Address,
 		&m.DateBirth,
-		&m.LocationPersonID,
+		&m.LocationID,
 	)
 	if err != nil {
 		return model.Person{}, err
@@ -210,8 +206,8 @@ func (p Person) scanRow(s pgx.Row) (model.Person, error) {
 	return m, nil
 }
 
-func (p Person) scanRowWithLocation(s pgx.Row) (model.PersonOutput, error) {
-	m := model.PersonOutput{}
+func (p Person) scanRowWithLocation(s pgx.Row) (model.PersonSecondLevel, error) {
+	m := model.PersonSecondLevel{}
 
 	err := s.Scan(
 		&m.ID,
@@ -223,7 +219,6 @@ func (p Person) scanRowWithLocation(s pgx.Row) (model.PersonOutput, error) {
 		&m.Phone,
 		&m.Gender,
 		&m.MaritalStatus,
-		&m.Address,
 		&m.DateBirth,
 		&m.LocationPerson.ID,
 		&m.LocationPerson.Country,
@@ -232,7 +227,7 @@ func (p Person) scanRowWithLocation(s pgx.Row) (model.PersonOutput, error) {
 		&m.LocationPerson.District,
 	)
 	if err != nil {
-		return model.PersonOutput{}, err
+		return model.PersonSecondLevel{}, err
 	}
 
 	return m, nil

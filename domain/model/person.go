@@ -6,22 +6,23 @@ import (
 )
 
 type Person struct {
-	ID               uuid.UUID `json:"id"`
-	DocumentType     string    `json:"document_type"`
-	Document         string    `json:"document"`
-	Names            string    `json:"names"`
-	Lastname         string    `json:"lastname"`
-	MLastname        string    `json:"m_lastname"`
-	Phone            string    `json:"phone"`
-	Gender           string    `json:"gender"`
-	MaritalStatus    string    `json:"marital_status"`
-	DateBirth        time.Time `json:"date_birth"`
-	LocationPersonID uuid.UUID `json:"location_person_id"`
+	ID            uuid.UUID `json:"id"`
+	DocumentType  string    `json:"document_type"`
+	Document      string    `json:"document"`
+	Names         string    `json:"names"`
+	Lastname      string    `json:"lastname"`
+	MLastname     string    `json:"m_lastname"`
+	Phone         string    `json:"phone"`
+	Gender        string    `json:"gender"`
+	MaritalStatus string    `json:"marital_status"`
+	DateBirth     time.Time `json:"date_birth"`
+	Photo         uuid.UUID `json:"photo"`
+	LocationID    uuid.UUID `json:"location_id"`
 }
 
 type Persons []Person
 
-type PersonOutput struct {
+type PersonSecondLevel struct {
 	ID             uuid.UUID `json:"id"`
 	DocumentType   string    `json:"document_type"`
 	Document       string    `json:"document"`
@@ -35,4 +36,4 @@ type PersonOutput struct {
 	LocationPerson Location  `json:"location_person"`
 }
 
-type PersonsOutput []PersonOutput
+type PersonsOutput []PersonSecondLevel

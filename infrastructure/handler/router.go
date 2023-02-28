@@ -5,6 +5,7 @@ import (
 	routerLocationPerson "github.com/Melany751/house-match-server/infrastructure/handler/location"
 	routerModule "github.com/Melany751/house-match-server/infrastructure/handler/module"
 	routerPerson "github.com/Melany751/house-match-server/infrastructure/handler/person"
+	routerPersonLocation "github.com/Melany751/house-match-server/infrastructure/handler/personlocation"
 	routerProperty "github.com/Melany751/house-match-server/infrastructure/handler/property"
 	routerRole "github.com/Melany751/house-match-server/infrastructure/handler/role"
 	routerRoleView "github.com/Melany751/house-match-server/infrastructure/handler/roleview"
@@ -20,6 +21,8 @@ func InitRoutes(specification model.RouterSpecification) {
 	routerPerson.NewRouter(specification)
 	// Location
 	routerLocationPerson.NewRouter(specification)
+	// PersonLocation
+	routerPersonLocation.NewRouter(specification)
 	// Role
 	routerRole.NewRouter(specification)
 	// Module

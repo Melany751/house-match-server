@@ -6,7 +6,7 @@ import (
 )
 
 type StoragePerson interface {
-	GetByIdStorage(id uuid.UUID) (*model.PersonOutput, error)
+	GetByIdStorage(id uuid.UUID) (*model.PersonSecondLevel, error)
 	GetAllStorage() (model.PersonsOutput, error)
 	CreateStorage(m model.Person) (*uuid.UUID, error)
 	UpdateStorage(id uuid.UUID, user model.Person) (bool, error)

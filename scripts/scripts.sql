@@ -58,6 +58,16 @@ create table domain.users_roles
         constraint users_roles_roles_id_fk references domain.roles
 );
 
+create table domain.medias
+(
+    id   uuid default gen_random_uuid() not null
+    primary key,
+    name varchar                        not null,
+    url  varchar,
+    size double precision,
+    type varchar
+    );
+
 create table domain.properties
 (
     id               uuid default gen_random_uuid() not null primary key unique,
@@ -72,11 +82,36 @@ create table domain.properties
     number_of_floors int
 );
 
-CREATE TABLE domain.location_person
+create table domain.location
 (
-    id       uuid default gen_random_uuid() not null primary key unique,
+    id       uuid default gen_random_uuid() not null
+    primary key,
     country  varchar                        not null,
     city     varchar                        not null,
     province varchar,
-    district varchar
-);
+    district varchar,
+    address  varchar,
+    lat      double precision,
+    long     double precision
+    );
+
+create table domain.persons
+(
+    id                 uuid default gen_random_uuid() not null
+    primary key,
+    document_type      varchar                        not null,
+    document           varchar                        not null,
+    names              varchar                        not null,
+    lastname           varchar                        not null,
+    m_lastname         varchar,
+    phone              varchar,
+    gender             varchar                        not null,
+    marital_status     varchar,
+    date_birth         time,
+    photo               uuid
+    constraint persons_media_id_fk
+    references domain.medias,
+    location_id uuid
+    constraint persons_location_person_id_fk
+    references domain.location_person
+    );

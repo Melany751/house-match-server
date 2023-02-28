@@ -15,7 +15,7 @@ func New(storage person.StoragePerson) Person {
 	return Person{storage}
 }
 
-func (p Person) GetById(id uuid.UUID) (*model.PersonOutput, error) {
+func (p Person) GetById(id uuid.UUID) (*model.PersonSecondLevel, error) {
 	m, err := p.storage.GetByIdStorage(id)
 	if err != nil {
 		return nil, fmt.Errorf("person.storage.GetById(): %w", err)

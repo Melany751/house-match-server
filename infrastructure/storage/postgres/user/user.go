@@ -222,9 +222,8 @@ func (u User) scanRowWithPerson(s pgx.Row) (model.UserOutput, error) {
 		&m.Person.Phone,
 		&m.Person.Gender,
 		&m.Person.MaritalStatus,
-		&m.Person.Address,
 		&m.Person.DateBirth,
-		&m.Person.LocationPersonID,
+		&m.Person.LocationID,
 	)
 	if err != nil {
 		return model.UserOutput{}, err

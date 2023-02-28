@@ -636,6 +636,144 @@
         }
       }
     },
+    "/personsLocations": {
+      "post": {
+        "operationId": "createPersonLocation",
+        "tags": [
+          "PersonsLocations"
+        ],
+        "summary": "Create Person with location",
+        "description": "Esta operacion permite crear una persona con location.",
+        "requestBody": {
+          "description": "Cuerpo del mensaje para crear el person.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonLocationCreateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/personsLocations/{id}": {
+      "put": {
+        "operationId": "updatePersonLocation",
+        "tags": [
+          "PersonsLocations"
+        ],
+        "summary": "Update Person with location",
+        "description": "Esta operacion permite actualizar una persona con location.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "Cuerpo del mensaje para crear el person.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonLocationUpdateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoolOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/userRole/user/{userID}": {
       "get": {
         "operationId": "getUserRoles",
@@ -2936,6 +3074,11 @@
             "example": "names",
             "description": "names del person"
           },
+          "lastname": {
+            "type": "string",
+            "example": "lastname",
+            "description": "lastname del person"
+          },
           "m_lastname": {
             "type": "string",
             "example": "m_lastname",
@@ -2961,7 +3104,12 @@
             "example": "2023-02-19T06:46:57+00:00",
             "description": "date_birth del person"
           },
-          "location_person_id": {
+          "photo": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id de la photo person."
+          },
+          "location_id": {
             "type": "string",
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "description": "id del location person."
@@ -2991,6 +3139,11 @@
             "example": "names",
             "description": "names del person"
           },
+          "lastname": {
+            "type": "string",
+            "example": "black",
+            "description": "lastname del person"
+          },
           "m_lastname": {
             "type": "string",
             "example": "black",
@@ -3015,6 +3168,11 @@
             "type": "string",
             "example": "2023-02-19T06:46:57+00:00",
             "description": "date_birth del person"
+          },
+          "photo": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id de la photo person."
           },
           "location_person": {
             "$ref": "#/components/schemas/Location"
@@ -3039,6 +3197,11 @@
             "example": "names",
             "description": "names del person"
           },
+          "lastname": {
+            "type": "string",
+            "example": "names",
+            "description": "lastnames del person"
+          },
           "m_lastname": {
             "type": "string",
             "example": "black",
@@ -3059,20 +3222,75 @@
             "example": "marital_status",
             "description": "marital_status del person"
           },
-          "address": {
+          "date_birth": {
             "type": "string",
-            "example": "address",
-            "description": "address del person"
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_birth del person"
+          },
+          "photo": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id de la photo."
+          },
+          "location_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del location person."
+          }
+        }
+      },
+      "PersonWithoutLocation": {
+        "type": "object",
+        "properties": {
+          "document_type": {
+            "type": "string",
+            "example": "document_type",
+            "description": "document_type o nick."
+          },
+          "document": {
+            "type": "string",
+            "example": "document",
+            "description": "document del person."
+          },
+          "names": {
+            "type": "string",
+            "example": "names",
+            "description": "names del person"
+          },
+          "lastname": {
+            "type": "string",
+            "example": "names",
+            "description": "lastnames del person"
+          },
+          "m_lastname": {
+            "type": "string",
+            "example": "black",
+            "description": "m_lastname del person"
+          },
+          "phone": {
+            "type": "string",
+            "example": "987654321",
+            "description": "phone o nick."
+          },
+          "gender": {
+            "type": "string",
+            "example": "m",
+            "description": "gender del person."
+          },
+          "marital_status": {
+            "type": "string",
+            "example": "marital_status",
+            "description": "marital_status del person"
           },
           "date_birth": {
             "type": "string",
             "example": "2023-02-19T06:46:57+00:00",
             "description": "date_birth del person"
           },
-          "location_person_id": {
+          "photo": {
             "type": "string",
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
-            "description": "id del location person."
+            "description": "id de la photo."
           }
         }
       },
@@ -3090,6 +3308,29 @@
           "$ref": "#/components/schemas/PersonSecondLevel"
         }
       },
+      "PersonLocationCreateInput": {
+        "type": "object",
+        "properties": {
+          "person": {
+            "$ref": "#/components/schemas/PersonWithoutLocation"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationInput"
+          }
+        }
+      },
+      "PersonLocationUpdateInput": {
+        "type": "object",
+        "properties": {
+          "person": {
+            "$ref": "#/components/schemas/PersonInput"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationInput"
+          }
+        }
+      },
+
       "Module": {
         "type": "object",
         "properties": {
@@ -3434,6 +3675,16 @@
             "type": "string",
             "example": "address",
             "description": "address del person"
+          },
+          "lat": {
+            "type": "number",
+            "example": 1.1,
+            "description": "lat"
+          },
+          "long": {
+            "type": "number",
+            "example": 1.1,
+            "description": "long"
           }
         }
       },
@@ -3459,6 +3710,21 @@
             "type": "string",
             "example": "district",
             "description": "district"
+          },
+          "address": {
+            "type": "string",
+            "example": "address",
+            "description": "address"
+          },
+          "lat": {
+            "type": "number",
+            "example": 1.1,
+            "description": "lat"
+          },
+          "long": {
+            "type": "number",
+            "example": 1.1,
+            "description": "long"
           }
         }
       },
