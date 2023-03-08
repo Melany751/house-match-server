@@ -51,6 +51,17 @@ var (
 				       p.date_birth,
 				       p.location_person_id
 				FROM domain.users u INNER JOIN domain.persons p ON p.id = u.person_id`
+	_psqlGetAllWithRoles = `SELECT u.id,
+								   u.user,
+								   u.password,
+								   u.email,
+								   u.theme,
+								   r.id,
+								   r.name,
+								   r.description,
+								   r."order"
+				FROM domain.users_roles ur INNER JOIN domain.users u ON u.id = ur.user_id
+                INNER JOIN domain.roles r ON ur.role_id = r.id`
 	_psqlInsert = `INSERT INTO domain.users (id, "user", "password", "email", "theme", "person_id") VALUES ($1, $2, $3, $4, $5, $6)`
 	_psqlUpdate = `UPDATE domain.users SET "user"=$2, "password"=$3, "email"=$4, "theme"=$5, "person_id"=$6 WHERE id=$1`
 	_psqlDelete = `DELETE FROM domain.users WHERE id=$1`
@@ -106,6 +117,33 @@ func (u User) GetAllStorage() (model.UsersOutput, error) {
 	}
 
 	return ms, nil
+}
+
+func (u User) GetAllWithRolesStorage() (model.UsersWithRolesOutput, error) {
+	stmt, err := u.db.Prepare(_psqlGetAllWithRoles)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query()
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var ms model.UsersWithRoles
+	var m model.UserWithRole
+
+	for rows.Next() {
+		m, err = u.scanRowWithRole(rows)
+		if err != nil {
+			break
+		}
+		ms = append(ms, m)
+	}
+
+	return makeUsersWithRoles(ms), nil
 }
 
 func (u User) CreateStorage(user model.User) (*uuid.UUID, error) {
@@ -230,4 +268,31 @@ func (u User) scanRowWithPerson(s pgx.Row) (model.UserOutput, error) {
 	}
 
 	return m, nil
+}
+
+func (u User) scanRowWithRole(s pgx.Row) (model.UserWithRole, error) {
+	m := model.UserWithRole{}
+
+	err := s.Scan(
+		&m.ID,
+		&m.User,
+		&m.Password,
+		&m.Email,
+		&m.Theme,
+		&m.Role.ID,
+		&m.Role.Name,
+		&m.Role.Description,
+		&m.Role.Order,
+	)
+	if err != nil {
+		return model.UserWithRole{}, err
+	}
+
+	return m, nil
+}
+
+func makeUsersWithRoles(ms model.UsersWithRoles) model.UsersWithRolesOutput {
+	result := ms.GetUserWithRole()
+
+	return result
 }

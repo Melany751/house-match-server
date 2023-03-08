@@ -42,6 +42,15 @@ func (h handler) getAll(c *gin.Context) {
 	c.JSON(response.OK(ms))
 }
 
+func (h handler) getAllWithRoles(c *gin.Context) {
+	ms, err := h.useCase.GetAllWithRoles()
+	if err != nil {
+		c.JSON(response.Wrong(model.ResponseError{Error: err.Error()}))
+		return
+	}
+	c.JSON(response.OK(ms))
+}
+
 func (h handler) create(c *gin.Context) {
 	var req model.User
 	fmt.Println(req)

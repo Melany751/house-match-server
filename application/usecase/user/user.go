@@ -33,6 +33,15 @@ func (u User) GetAll() (model.UsersOutput, error) {
 	return users, nil
 }
 
+func (u User) GetAllWithRoles() (model.UsersWithRolesOutput, error) {
+	users, err := u.storage.GetAllWithRolesStorage()
+	if err != nil {
+		return nil, fmt.Errorf("user.storage.GetAllWithRoles(): %w", err)
+	}
+
+	return users, nil
+}
+
 func (u User) Create(user model.User) (*model.CreateOutput, error) {
 	id, err := u.storage.CreateStorage(user)
 	if err != nil {

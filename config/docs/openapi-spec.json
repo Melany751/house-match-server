@@ -324,6 +324,58 @@
         }
       }
     },
+    "/users/roles": {
+      "get": {
+        "operationId": "getUsersWithRoles",
+        "tags": [
+          "Users"
+        ],
+        "summary": "Users list with roles",
+        "description": "Esta operación permite listar todos los usuarios con sus roles.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsersWithRoles"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/persons": {
       "get": {
         "operationId": "getPersons",
@@ -3037,6 +3089,44 @@
           }
         }
       },
+      "UserWithRoles": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "ID del usuario."
+          },
+          "user": {
+            "type": "string",
+            "example": "user",
+            "description": "Usuario o nick."
+          },
+          "password": {
+            "type": "string",
+            "example": "password",
+            "description": "Password del usuario."
+          },
+          "email": {
+            "type": "string",
+            "example": "email@email.com",
+            "description": "Email del usuario"
+          },
+          "theme": {
+            "type": "string",
+            "example": "black",
+            "description": "Tema de visualizacion del usuario"
+          },
+          "person_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "ID del person."
+          },
+          "roles": {
+            "$ref": "#/components/schemas/Roles"
+          }
+        }
+      },
       "Users": {
         "type": "array",
         "description": "Lista de usuarios.",
@@ -3049,6 +3139,13 @@
         "description": "Lista de usuarios.",
         "items": {
           "$ref": "#/components/schemas/UserSecondLevel"
+        }
+      },
+      "UsersWithRoles": {
+        "type": "array",
+        "description": "Lista de usuarios con roles.",
+        "items": {
+          "$ref": "#/components/schemas/UserWithRoles"
         }
       },
       "Person": {
