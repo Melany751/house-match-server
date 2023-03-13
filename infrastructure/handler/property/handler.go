@@ -7,6 +7,7 @@ import (
 	"github.com/Melany751/house-match-server/domain/services/response"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"strings"
 )
 
 type handler struct {
@@ -50,6 +51,34 @@ func (h handler) create(c *gin.Context) {
 	}
 
 	id, err := h.useCase.Create(req)
+	if err != nil {
+		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
+		return
+	}
+
+	c.JSON(response.Created(id))
+}
+
+func (h handler) createComplete(c *gin.Context) {
+	idsMediaString := c.Query("id")
+	idsMedia := strings.Split(idsMediaString, ",")
+	var idsMediaUUID []uuid.UUID
+	for _, idMedia := range idsMedia {
+		uidMedia, err := uuid.Parse(idMedia)
+		if err != nil {
+			fmt.Printf("Error al convertir la cadena en UUID: %s\n", err)
+			return
+		}
+		idsMediaUUID = append(idsMediaUUID, uidMedia)
+	}
+
+	var req model.PropertyComplete
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(response.BadRequest(model.ResponseError{fmt.Sprintf("Error read body, error: %s", err.Error())}))
+		return
+	}
+
+	id, err := h.useCase.CreateComplete(req, idsMediaUUID)
 	if err != nil {
 		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
 		return

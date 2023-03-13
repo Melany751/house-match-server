@@ -2547,6 +2547,7 @@
         ],
         "summary": "Property update",
         "description": "Esta operación permite actualizar un property.",
+
         "parameters": [
           {
             "name": "id",
@@ -2639,6 +2640,79 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BoolOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/properties/create": {
+      "post": {
+        "operationId": "createCompleteProperty",
+        "tags": [
+          "Properties"
+        ],
+        "summary": "Create Property with location and medias",
+        "description": "Esta operacion permite crear un property con location y medias.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9,b9995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Cuerpo del mensaje para crear el property con location y medias.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PropertyLocationCreateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdOutput"
                 }
               }
             }
@@ -3840,8 +3914,15 @@
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "description": "id del property."
           },
-          "user": {
-            "$ref": "#/components/schemas/User"
+          "user_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del usuario."
+          },
+          "location_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del usuario."
           },
           "description": {
             "type": "string",
@@ -3877,10 +3958,151 @@
             "type": "integer",
             "example": 1,
             "description": "number of floors del property"
+          },
+          "rooms": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of rooms del property"
+          },
+          "bathrooms": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of bathrooms del property"
+          },
+          "yard": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of yard del property"
+          },
+          "terrace": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of terrace del property"
+          },
+          "living_room": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of living_room del property"
+          },
+          "laundry_room": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of laundry_room del property"
+          },
+          "kitchen": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of kitchen del property"
+          },
+          "garage": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of garage del property"
           }
         }
       },
       "PropertyInput": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del usuario."
+          },
+          "location_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del usuario."
+          },
+          "description": {
+            "type": "string",
+            "example": "description",
+            "description": "description del property."
+          },
+          "type": {
+            "type": "string",
+            "example": "type",
+            "description": "type del property"
+          },
+          "length": {
+            "type": "number",
+            "example": 1.0,
+            "description": "length del property"
+          },
+          "width": {
+            "type": "number",
+            "example": 1.0,
+            "description": "width del property"
+          },
+          "area": {
+            "type": "number",
+            "example": 1.0,
+            "description": "area del property"
+          },
+          "floor": {
+            "type": "integer",
+            "example": 1,
+            "description": "floor del property"
+          },
+          "number_of_floor": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of floors del property"
+          },
+          "rooms": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of rooms del property"
+          },
+          "bathrooms": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of bathrooms del property"
+          },
+          "yard": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of yard del property"
+          },
+          "terrace": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of terrace del property"
+          },
+          "living_room": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of living_room del property"
+          },
+          "laundry_room": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of laundry_room del property"
+          },
+          "kitchen": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of kitchen del property"
+          },
+          "garage": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of garage del property"
+          }
+        }
+      },
+      "PropertyLocationCreateInput": {
+        "type": "object",
+        "properties": {
+          "property": {
+            "$ref": "#/components/schemas/PropertyWithoutLocation"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationInput"
+          }
+        }
+      },
+      "PropertyWithoutLocation": {
         "type": "object",
         "properties": {
           "user_id": {
@@ -3922,6 +4144,46 @@
             "type": "integer",
             "example": 1,
             "description": "number of floors del property"
+          },
+          "rooms": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of rooms del property"
+          },
+          "bathrooms": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of bathrooms del property"
+          },
+          "yard": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of yard del property"
+          },
+          "terrace": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of terrace del property"
+          },
+          "living_room": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of living_room del property"
+          },
+          "laundry_room": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of laundry_room del property"
+          },
+          "kitchen": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of kitchen del property"
+          },
+          "garage": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of garage del property"
           }
         }
       },

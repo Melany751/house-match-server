@@ -43,6 +43,16 @@ func (p Property) Create(property model.Property) (*model.CreateOutput, error) {
 	return &m, nil
 }
 
+func (p Property) CreateComplete(propertyComplete model.PropertyComplete, idsMedia []uuid.UUID) (*model.CreateOutput, error) {
+	id, err := p.storage.CreateCompleteStorage(propertyComplete, idsMedia)
+	if err != nil {
+		return nil, fmt.Errorf("property.storage.CreateComplete(): %w", err)
+	}
+	var m model.CreateOutput
+	m.Id = id
+	return &m, nil
+}
+
 func (p Property) Update(id uuid.UUID, property model.Property) (*model.UpdateOutput, error) {
 	updated, err := p.storage.UpdateStorage(id, property)
 	if err != nil {

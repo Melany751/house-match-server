@@ -23,6 +23,14 @@ var (
     				p.area,
     				p.floor,
     				p.number_of_floors,
+    				p.rooms,
+					p.bathrooms,
+					p.yard,
+					p.terrace,
+					p.living_room,
+					p.laundry_room,
+					p.kitchen,
+					p.garage,
     				u.id, 
     				u.user, 
     				u.password, 
@@ -39,14 +47,25 @@ var (
     				p.area,
     				p.floor,
     				p.number_of_floors,
+    				p.rooms,
+					p.bathrooms,
+					p.yard,
+					p.terrace,
+					p.living_room,
+					p.laundry_room,
+					p.kitchen,
+					p.garage,
     				u.id, 
     				u.user, 
     				u.password, 
     				u.email, 
     				u.theme FROM domain.properties p INNER JOIN domain.users u ON p.user_id=u.id`
-	_psqlInsert = `INSERT INTO domain.properties (id, "user_id", "description", "type", "length","width","area","floor","number_of_floors") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
-	_psqlUpdate = `UPDATE domain.properties SET "user_id"=$2, "description"=$3, "type"=$4, "length"=$5, "width"=$6, "area"=$7, "floor"=$8, "number_of_floors"=$9 WHERE id=$1`
-	_psqlDelete = `DELETE FROM domain.properties WHERE id=$1`
+	_psqlInsertProperty      = `INSERT INTO domain.properties (id, "user_id","location_id", "description", "type", "length","width","area","floor","number_of_floors","rooms","bathrooms","yard","terrace","living_room","laundry_room","kitchen","garage") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`
+	_psqlInsertLocation      = `INSERT INTO domain.locations (id, country, city, province, district, address, lat, long) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`
+	_psqlInsertPropertyMedia = `INSERT INTO domain.properties_medias ("property_id","media_id") VALUES ($1, $2)`
+	_psqlUpdateProperty      = `UPDATE domain.properties SET "user_id"=$2, "location_id"=$3, "description"=$4, "type"=$5, "length"=$6, "width"=$7, "area"=$8, "floor"=$9,$"number_of_floors"=10,"rooms"=$11,"bathrooms"=$12,"yard"=$13,"terrace"=$14,"living_room"=$15,"laundry_room"=$16,"kitchen"=$17, "garage"=$18 WHERE id=$1`
+	_psqlUpdateLocation      = `UPDATE domain.locations SET "country"=$2, "city"=$3, "province"=$4, "district"=$5, "address"=$6, "lat"=$7, "long"=$8 WHERE id=$1`
+	_psqlDelete              = `DELETE FROM domain.properties WHERE id=$1`
 )
 
 type Property struct {
@@ -110,7 +129,7 @@ func (p Property) CreateStorage(property model.Property) (*uuid.UUID, error) {
 
 	args := p.readModelProperty(property)
 
-	stmt, err := p.db.Prepare(_psqlInsert)
+	stmt, err := p.db.Prepare(_psqlInsertProperty)
 	if err != nil {
 		return nil, err
 	}
@@ -124,12 +143,105 @@ func (p Property) CreateStorage(property model.Property) (*uuid.UUID, error) {
 	return &newId, nil
 }
 
+func (p Property) CreateCompleteStorage(property model.PropertyComplete, idsMedia []uuid.UUID) (*uuid.UUID, error) {
+	idLocation, err := p.CreateLocation(property.Location)
+
+	if err != nil {
+		return nil, err
+	}
+
+	idProperty, err := p.CreateProperty(property.Property, idLocation)
+
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = p.CreateMedias(idsMedia, idProperty)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return idProperty, nil
+}
+
+func (p Property) CreateLocation(location model.Location) (*uuid.UUID, error) {
+	newIdLocation, err := uuid.NewUUID()
+	if err != nil {
+		fmt.Printf("Error generate UUID: %s\n", err)
+	}
+
+	location.ID = newIdLocation
+	args := p.readModelLocation(location)
+
+	stmt, err := p.db.Prepare(_psqlInsertLocation)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(args...)
+	if err != nil {
+		return nil, err
+	}
+
+	return &newIdLocation, nil
+}
+
+func (p Property) CreateProperty(property model.Property, idLocation *uuid.UUID) (*uuid.UUID, error) {
+	newIdProperty, err := uuid.NewUUID()
+	if err != nil {
+		fmt.Printf("Error generate UUID: %s\n", err)
+	}
+
+	property.ID = newIdProperty
+	property.LocationID = *idLocation
+	args := p.readModelProperty(property)
+
+	stmt, err := p.db.Prepare(_psqlInsertProperty)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(args...)
+	if err != nil {
+		return nil, err
+	}
+
+	return &newIdProperty, nil
+}
+
+func (p Property) CreateMedias(idsMedia []uuid.UUID, idProperty *uuid.UUID) (bool, error) {
+
+	for _, element := range idsMedia {
+		var propertyMedia model.PropertyMedia
+		propertyMedia.PropertyID = *idProperty
+		propertyMedia.MediaID = element
+
+		args := p.readModelPropertyMedia(propertyMedia)
+
+		stmt, err := p.db.Prepare(_psqlInsertPropertyMedia)
+		if err != nil {
+			return false, err
+		}
+		defer stmt.Close()
+
+		_, err = stmt.Exec(args...)
+		if err != nil {
+			return false, err
+		}
+	}
+	return true, nil
+
+}
+
 func (p Property) UpdateStorage(id uuid.UUID, property model.Property) (bool, error) {
 	property.ID = id
 
 	args := p.readModelProperty(property)
 
-	stmt, err := p.db.Prepare(_psqlUpdate)
+	stmt, err := p.db.Prepare(_psqlUpdateProperty)
 	if err != nil {
 		return false, err
 	}
@@ -172,6 +284,26 @@ func (p Property) DeleteStorage(id uuid.UUID) (bool, error) {
 
 func (p Property) readModelProperty(property model.Property) []any {
 	v := reflect.ValueOf(property)
+	values := make([]interface{}, v.NumField())
+	for i := 0; i < v.NumField(); i++ {
+		values[i] = v.Field(i).Interface()
+	}
+
+	return values
+}
+
+func (p Property) readModelLocation(location model.Location) []any {
+	v := reflect.ValueOf(location)
+	values := make([]interface{}, v.NumField())
+	for i := 0; i < v.NumField(); i++ {
+		values[i] = v.Field(i).Interface()
+	}
+
+	return values
+}
+
+func (p Property) readModelPropertyMedia(propertyMedia model.PropertyMedia) []any {
+	v := reflect.ValueOf(propertyMedia)
 	values := make([]interface{}, v.NumField())
 	for i := 0; i < v.NumField(); i++ {
 		values[i] = v.Field(i).Interface()

@@ -53,13 +53,13 @@ type UsersWithRoles []UserWithRole
 func (ur UsersWithRoles) GetUserWithRole() UsersWithRolesOutput {
 	var results UsersWithRolesOutput
 	mapa := make(map[uuid.UUID]bool)
-	mapa_index := make(map[uuid.UUID]int)
+	mapaIndex := make(map[uuid.UUID]int)
 	cont := 0
 
 	for _, element := range ur {
 		if _, ok := mapa[element.ID]; !ok {
 			mapa[element.ID] = true
-			mapa_index[element.ID] = cont
+			mapaIndex[element.ID] = cont
 			cont = cont + 1
 			var RolesI Roles
 			results = append(results, UserWithRolesOutput{
@@ -77,13 +77,12 @@ func (ur UsersWithRoles) GetUserWithRole() UsersWithRolesOutput {
 				}),
 			})
 		} else {
-			results[mapa_index[element.ID]].Roles = append(results[mapa_index[element.ID]].Roles, Role{
+			results[mapaIndex[element.ID]].Roles = append(results[mapaIndex[element.ID]].Roles, Role{
 				ID:          element.Role.ID,
 				Name:        element.Role.Name,
 				Description: element.Role.Description,
 				Order:       element.Role.Order,
 			})
-			//results = BusquedaUsuario(results, element.ID, element.Role)
 		}
 	}
 
