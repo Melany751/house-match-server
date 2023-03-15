@@ -60,8 +60,11 @@ func (h handler) create(c *gin.Context) {
 }
 
 func (h handler) createComplete(c *gin.Context) {
-	idsMediaString := c.Query("id")
-	idsMedia := strings.Split(idsMediaString, ",")
+	idsMediaString := c.Query("medias_ids")
+	var idsMedia []string
+	if len(idsMediaString) != 0 {
+		idsMedia = strings.Split(idsMediaString, ",")
+	}
 	var idsMediaUUID []uuid.UUID
 	for _, idMedia := range idsMedia {
 		uidMedia, err := uuid.Parse(idMedia)
@@ -102,6 +105,45 @@ func (h handler) update(c *gin.Context) {
 	}
 
 	created, err := h.useCase.Update(uid, req)
+	if err != nil {
+		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
+		return
+	}
+
+	c.JSON(response.Updated(created))
+}
+
+func (h handler) updateComplete(c *gin.Context) {
+	id := c.Param("id")
+	uid, err := uuid.Parse(id)
+	if err != nil {
+		fmt.Printf("Error al convertir la cadena en UUID: %s\n", err)
+		return
+	}
+
+	idsMediaString := c.Query("medias_ids")
+	var idsMedia []string
+	if len(idsMediaString) != 0 {
+		idsMedia = strings.Split(idsMediaString, ",")
+	}
+
+	var idsMediaUUID []uuid.UUID
+	for _, idMedia := range idsMedia {
+		uidMedia, err := uuid.Parse(idMedia)
+		if err != nil {
+			fmt.Printf("Error al convertir la cadena en UUID: %s\n", err)
+			return
+		}
+		idsMediaUUID = append(idsMediaUUID, uidMedia)
+	}
+
+	var req model.PropertyComplete
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(response.BadRequest(model.ResponseError{fmt.Sprintf("Error read body, error: %s", err.Error())}))
+		return
+	}
+
+	created, err := h.useCase.UpdateComplete(uid, req, idsMediaUUID)
 	if err != nil {
 		c.JSON(response.Wrong(model.ResponseError{err.Error()}))
 		return

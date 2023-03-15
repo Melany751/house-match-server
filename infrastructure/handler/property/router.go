@@ -27,5 +27,6 @@ func publicRoutes(api *gin.Engine, h handler, middlewares ...gin.HandlerFunc) {
 	routes.POST("", h.create)
 	routes.POST("/create", h.createComplete)
 	routes.PUT("/:id", h.update)
+	routes.PUT("/update/:id", h.updateComplete)
 	routes.DELETE("/:id", h.delete)
 }

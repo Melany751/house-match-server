@@ -63,6 +63,16 @@ func (p Property) Update(id uuid.UUID, property model.Property) (*model.UpdateOu
 	return &m, nil
 }
 
+func (p Property) UpdateComplete(id uuid.UUID, propertyComplete model.PropertyComplete, idsMedia []uuid.UUID) (*model.UpdateOutput, error) {
+	updated, err := p.storage.UpdateCompleteStorage(id, propertyComplete, idsMedia)
+	if err != nil {
+		return nil, fmt.Errorf("property.storage.UpdateComplete(): %w", err)
+	}
+	var m model.UpdateOutput
+	m.Updated = updated
+	return &m, nil
+}
+
 func (p Property) Delete(id uuid.UUID) (bool, error) {
 	deleted, err := p.storage.DeleteStorage(id)
 	if err != nil {

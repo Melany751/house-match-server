@@ -11,5 +11,6 @@ type UseCaseModule interface {
 	Create(m model.Property) (*model.CreateOutput, error)
 	CreateComplete(m model.PropertyComplete, idsMedia []uuid.UUID) (*model.CreateOutput, error)
 	Update(id uuid.UUID, model model.Property) (*model.UpdateOutput, error)
+	UpdateComplete(id uuid.UUID, model model.PropertyComplete, idsMedia []uuid.UUID) (*model.UpdateOutput, error)
 	Delete(id uuid.UUID) (bool, error)
 }

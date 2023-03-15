@@ -63,9 +63,10 @@ var (
 	_psqlInsertProperty      = `INSERT INTO domain.properties (id, "user_id","location_id", "description", "type", "length","width","area","floor","number_of_floors","rooms","bathrooms","yard","terrace","living_room","laundry_room","kitchen","garage") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`
 	_psqlInsertLocation      = `INSERT INTO domain.locations (id, country, city, province, district, address, lat, long) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`
 	_psqlInsertPropertyMedia = `INSERT INTO domain.properties_medias ("property_id","media_id") VALUES ($1, $2)`
-	_psqlUpdateProperty      = `UPDATE domain.properties SET "user_id"=$2, "location_id"=$3, "description"=$4, "type"=$5, "length"=$6, "width"=$7, "area"=$8, "floor"=$9,$"number_of_floors"=10,"rooms"=$11,"bathrooms"=$12,"yard"=$13,"terrace"=$14,"living_room"=$15,"laundry_room"=$16,"kitchen"=$17, "garage"=$18 WHERE id=$1`
+	_psqlUpdateProperty      = `UPDATE domain.properties SET "user_id"=$2, "location_id"=$3, "description"=$4, "type"=$5, "length"=$6, "width"=$7, "area"=$8, "floor"=$9, "number_of_floors"=$10,"rooms"=$11,"bathrooms"=$12,"yard"=$13,"terrace"=$14,"living_room"=$15,"laundry_room"=$16,"kitchen"=$17, "garage"=$18 WHERE id=$1`
 	_psqlUpdateLocation      = `UPDATE domain.locations SET "country"=$2, "city"=$3, "province"=$4, "district"=$5, "address"=$6, "lat"=$7, "long"=$8 WHERE id=$1`
 	_psqlDelete              = `DELETE FROM domain.properties WHERE id=$1`
+	_psqlDeleteMedias        = `DELETE FROM domain.properties_medias WHERE property_id=$1`
 )
 
 type Property struct {
@@ -260,6 +261,109 @@ func (p Property) UpdateStorage(id uuid.UUID, property model.Property) (bool, er
 	return true, nil
 }
 
+func (p Property) UpdateCompleteStorage(id uuid.UUID, propertyComplete model.PropertyComplete, idsMedia []uuid.UUID) (bool, error) {
+	_, err := p.UpdateProperty(id, propertyComplete.Property)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = p.UpdateLocation(propertyComplete.Property.LocationID, propertyComplete.Location)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = p.UpdateMedia(id, idsMedia)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (p Property) UpdateProperty(id uuid.UUID, property model.Property) (bool, error) {
+	property.ID = id
+
+	args := p.readModelProperty(property)
+	stmt, err := p.db.Prepare(_psqlUpdateProperty)
+	if err != nil {
+		return false, err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Exec(args...)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = res.RowsAffected()
+	if err != nil {
+		return false, fmt.Errorf("nothing rows updated, error: %v", err)
+	}
+
+	return true, nil
+}
+
+func (p Property) UpdateLocation(id uuid.UUID, Location model.Location) (bool, error) {
+	Location.ID = id
+
+	args := p.readModelLocation(Location)
+
+	stmt, err := p.db.Prepare(_psqlUpdateLocation)
+	if err != nil {
+		return false, err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Exec(args...)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = res.RowsAffected()
+	if err != nil {
+		return false, fmt.Errorf("nothing rows updated, error: %v", err)
+	}
+
+	return true, nil
+}
+
+func (p Property) UpdateMedia(id uuid.UUID, idsMedia []uuid.UUID) (bool, error) {
+	_, err := p.DeleteMedia(id)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = p.CreateMedias(idsMedia, &id)
+
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (p Property) DeleteMedia(id uuid.UUID) (bool, error) {
+	args := []any{id}
+
+	stmt, err := p.db.Prepare(_psqlDeleteMedias)
+	if err != nil {
+		return false, err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Exec(args...)
+	if err != nil {
+		return false, err
+	}
+
+	_, err = res.RowsAffected()
+	if err != nil {
+		return false, fmt.Errorf("nothing rows delete, error: %v", err)
+	}
+
+	return true, nil
+}
+
 func (p Property) DeleteStorage(id uuid.UUID) (bool, error) {
 	args := []any{id}
 
@@ -324,7 +428,7 @@ func (p Property) scanRow(s pgx.Row) (model.Property, error) {
 		&m.Width,
 		&m.Area,
 		&m.Floor,
-		&m.NumberOfFloor,
+		&m.NumberOfFloors,
 	)
 	if err != nil {
 		return model.Property{}, err
@@ -343,7 +447,7 @@ func (p Property) scanRowWithUser(s pgx.Row) (model.PropertySecondLevel, error) 
 		&m.Width,
 		&m.Area,
 		&m.Floor,
-		&m.NumberOfFloor,
+		&m.NumberOfFloors,
 		&m.User.ID,
 		&m.User.User,
 		&m.User.Password,

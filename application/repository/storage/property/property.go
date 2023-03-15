@@ -11,5 +11,6 @@ type StorageProperty interface {
 	CreateStorage(m model.Property) (*uuid.UUID, error)
 	CreateCompleteStorage(m model.PropertyComplete, idsMedia []uuid.UUID) (*uuid.UUID, error)
 	UpdateStorage(id uuid.UUID, model model.Property) (bool, error)
+	UpdateCompleteStorage(id uuid.UUID, model model.PropertyComplete, idsMedia []uuid.UUID) (bool, error)
 	DeleteStorage(id uuid.UUID) (bool, error)
 }
