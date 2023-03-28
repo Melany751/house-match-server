@@ -958,7 +958,7 @@
     },
     "/userRole/user/{userId}/role/{roleId}": {
       "get": {
-        "operationId": "getUserWithRole",
+        "operationId": "getUser",
         "tags": [
           "User Role"
         ],
@@ -1102,7 +1102,7 @@
         }
       },
       "delete": {
-        "operationId": "deleteUserWithRole",
+        "operationId": "deleteUser",
         "tags": [
           "User Role"
         ],
@@ -1662,7 +1662,7 @@
     },
     "/roleView/role/{roleID}/view/{viewID}": {
       "get": {
-        "operationId": "getUserWithRoleView",
+        "operationId": "getUser",
         "tags": [
           "Role View"
         ],
@@ -1670,7 +1670,7 @@
         "description": "Esta operación permite listar un user role.",
         "parameters": [
           {
-            "name": "roleID",
+            "name": "roleId",
             "in": "path",
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "schema": {
@@ -1734,7 +1734,7 @@
         }
       },
       "delete": {
-        "operationId": "deleteUserWithRoleView",
+        "operationId": "deleteUser",
         "tags": [
           "Role View"
         ],
@@ -1742,7 +1742,7 @@
         "description": "Esta operación permite eliminar un user role.",
         "parameters": [
           {
-            "name": "roleID",
+            "name": "roleId",
             "in": "path",
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "schema": {
@@ -2613,6 +2613,7 @@
         ],
         "summary": "Property update",
         "description": "Esta operación permite actualizar un property.",
+
         "parameters": [
           {
             "name": "id",
@@ -3209,6 +3210,318 @@
           }
         }
       }
+    },
+    "/transactions": {
+      "get": {
+        "operationId": "getTransactions",
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Transaction list",
+        "description": "Esta operación permite listar todos los transactions.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsSecondLevel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createTransaction",
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Create Transaction",
+        "description": "Esta operacion permite crear un Transaction.",
+        "requestBody": {
+          "description": "Cuerpo del mensaje para crear el Transaction.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "operationId": "getTransaction",
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Transaction list",
+        "description": "Esta operación permite listar un Transaction.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionSecondLevel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateTransaction",
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Transaction update",
+        "description": "Esta operación permite actualizar un Transaction.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "Cuerpo del mensaje para actualizar el Transaction.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoolOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteTransaction",
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Transaction delete",
+        "description": "Esta operación permite eliminar un Transaction.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoolOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3669,6 +3982,7 @@
           }
         }
       },
+
       "Module": {
         "type": "object",
         "properties": {
@@ -4103,17 +4417,17 @@
           },
           "length": {
             "type": "number",
-            "example": 1,
+            "example": 1.0,
             "description": "length del property"
           },
           "width": {
             "type": "number",
-            "example": 1,
+            "example": 1.0,
             "description": "width del property"
           },
           "area": {
             "type": "number",
-            "example": 1,
+            "example": 1.0,
             "description": "area del property"
           },
           "floor": {
@@ -4193,17 +4507,17 @@
           },
           "length": {
             "type": "number",
-            "example": 1,
+            "example": 1.0,
             "description": "length del property"
           },
           "width": {
             "type": "number",
-            "example": 1,
+            "example": 1.0,
             "description": "width del property"
           },
           "area": {
             "type": "number",
-            "example": 1,
+            "example": 1.0,
             "description": "area del property"
           },
           "floor": {
@@ -4289,17 +4603,17 @@
           },
           "length": {
             "type": "number",
-            "example": 1,
+            "example": 1.0,
             "description": "length del property"
           },
           "width": {
             "type": "number",
-            "example": 1,
+            "example": 1.0,
             "description": "width del property"
           },
           "area": {
             "type": "number",
-            "example": 1,
+            "example": 1.0,
             "description": "area del property"
           },
           "floor": {
@@ -4380,6 +4694,126 @@
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
             "description": "Token User."
           }
+        }
+      },
+      "TransactionSecondLevel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del transaction."
+          },
+          "property": {
+            "$ref": "#/components/schemas/Property"
+          },
+          "cost": {
+            "type": "number",
+            "example": 1.0,
+            "description": "cost del transaction."
+          },
+          "currency": {
+            "type": "string",
+            "example": "soles",
+            "description": "currency del transaction."
+          },
+          "date_vip": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_vip del transaction"
+          },
+          "date_post": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_post del transaction"
+          },
+          "date_update": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_update del transaction"
+          },
+          "available": {
+            "type": "boolean",
+            "example": true,
+            "description": "available del transaction"
+          },
+          "type": {
+            "type": "string",
+            "example": "casa",
+            "description": "type del transaction"
+          },
+          "date_start": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_start del transaction"
+          },
+          "date_end": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_end del transaction"
+          }
+        }
+      },
+      "TransactionInput": {
+        "type": "object",
+        "properties": {
+          "property_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del transaction."
+          },
+          "cost": {
+            "type": "number",
+            "example": 1.0,
+            "description": "cost del transaction."
+          },
+          "currency": {
+            "type": "string",
+            "example": "soles",
+            "description": "currency del transaction."
+          },
+          "date_vip": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_vip del transaction"
+          },
+          "date_post": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_post del transaction"
+          },
+          "date_update": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_update del transaction"
+          },
+          "available": {
+            "type": "boolean",
+            "example": true,
+            "description": "available del transaction"
+          },
+          "type": {
+            "type": "string",
+            "example": "casa",
+            "description": "type del transaction"
+          },
+          "date_start": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_start del transaction"
+          },
+          "date_end": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_end del transaction"
+          }
+        }
+      },
+      "TransactionsSecondLevel": {
+        "type": "array",
+        "description": "Lista de transactions.",
+        "items": {
+          "$ref": "#/components/schemas/TransactionSecondLevel"
         }
       },
       "IdOutput": {
