@@ -10,26 +10,26 @@ import (
 )
 
 const (
-	table = "domain.location_persons"
+	table = "domain.locations"
 )
 
 var (
-	_psqlGetById = `SELECT * FROM domain.location_persons WHERE id = $1`
-	_psqlGetAll  = `SELECT * FROM domain.location_persons`
-	_psqlInsert  = `INSERT INTO domain.location_persons (id, "country", "city", "province", "district") VALUES ($1, $2, $3, $4, $5)`
-	_psqlUpdate  = `UPDATE domain.location_persons SET "country"=$2, "city"=$3, "province"=$4, "district"=$5 WHERE id=$1`
-	_psqlDelete  = `DELETE FROM domain.location_persons WHERE id=$1`
+	_psqlGetById = `SELECT * FROM domain.locations WHERE id = $1`
+	_psqlGetAll  = `SELECT * FROM domain.locations`
+	_psqlInsert  = `INSERT INTO domain.locations (id, "country", "city", "province", "district", "address", "lat", "long") VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
+	_psqlUpdate  = `UPDATE domain.locations SET "country"=$2, "city"=$3, "province"=$4, "district"=$5, "address"=$6, "lat"=$7, "long"=$8 WHERE id=$1`
+	_psqlDelete  = `DELETE FROM domain.locations WHERE id=$1`
 )
 
-type LocationPerson struct {
+type Location struct {
 	db *sql.DB
 }
 
-func New(db *sql.DB) LocationPerson {
-	return LocationPerson{db}
+func New(db *sql.DB) Location {
+	return Location{db}
 }
 
-func (u LocationPerson) GetByIdStorage(id uuid.UUID) (*model.Location, error) {
+func (u Location) GetByIdStorage(id uuid.UUID) (*model.Location, error) {
 	args := []any{id}
 
 	stmt, err := u.db.Prepare(_psqlGetById)
@@ -46,7 +46,7 @@ func (u LocationPerson) GetByIdStorage(id uuid.UUID) (*model.Location, error) {
 	return &m, nil
 }
 
-func (u LocationPerson) GetAllStorage() (model.Locations, error) {
+func (u Location) GetAllStorage() (model.Locations, error) {
 	stmt, err := u.db.Prepare(_psqlGetAll)
 	if err != nil {
 		return nil, err
@@ -73,7 +73,7 @@ func (u LocationPerson) GetAllStorage() (model.Locations, error) {
 	return ms, nil
 }
 
-func (u LocationPerson) CreateStorage(locationPerson model.Location) (*uuid.UUID, error) {
+func (u Location) CreateStorage(locationPerson model.Location) (*uuid.UUID, error) {
 	newId, err := uuid.NewUUID()
 	if err != nil {
 		fmt.Printf("Error generate UUID: %s\n", err)
@@ -96,7 +96,7 @@ func (u LocationPerson) CreateStorage(locationPerson model.Location) (*uuid.UUID
 	return &newId, nil
 }
 
-func (u LocationPerson) UpdateStorage(id uuid.UUID, locationPerson model.Location) (bool, error) {
+func (u Location) UpdateStorage(id uuid.UUID, locationPerson model.Location) (bool, error) {
 	locationPerson.ID = id
 
 	args := u.readModelLocationPerson(locationPerson)
@@ -120,7 +120,7 @@ func (u LocationPerson) UpdateStorage(id uuid.UUID, locationPerson model.Locatio
 	return true, nil
 }
 
-func (u LocationPerson) DeleteStorage(id uuid.UUID) (bool, error) {
+func (u Location) DeleteStorage(id uuid.UUID) (bool, error) {
 	args := []any{id}
 
 	stmt, err := u.db.Prepare(_psqlDelete)
@@ -142,7 +142,7 @@ func (u LocationPerson) DeleteStorage(id uuid.UUID) (bool, error) {
 	return true, nil
 }
 
-func (u LocationPerson) readModelLocationPerson(locationPerson model.Location) []any {
+func (u Location) readModelLocationPerson(locationPerson model.Location) []any {
 	v := reflect.ValueOf(locationPerson)
 	values := make([]interface{}, v.NumField())
 	for i := 0; i < v.NumField(); i++ {
@@ -152,7 +152,7 @@ func (u LocationPerson) readModelLocationPerson(locationPerson model.Location) [
 	return values
 }
 
-func (u LocationPerson) scanRow(s pgx.Row) (model.Location, error) {
+func (u Location) scanRow(s pgx.Row) (model.Location, error) {
 	m := model.Location{}
 
 	err := s.Scan(

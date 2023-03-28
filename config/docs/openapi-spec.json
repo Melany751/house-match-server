@@ -12,6 +12,72 @@
     }
   ],
   "paths": {
+    "/users/login": {
+      "post": {
+        "operationId": "login",
+        "tags": [
+          "Login"
+        ],
+        "summary": "Login",
+        "description": "Esta operacion permite acceder al sistema.",
+        "requestBody": {
+          "description": "Cuerpo del mensaje para acceder al sistema.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/login"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                },
+                "example": {
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "operationId": "getUsers",
@@ -892,7 +958,7 @@
     },
     "/userRole/user/{userId}/role/{roleId}": {
       "get": {
-        "operationId": "getUser",
+        "operationId": "getUserWithRole",
         "tags": [
           "User Role"
         ],
@@ -1036,7 +1102,7 @@
         }
       },
       "delete": {
-        "operationId": "deleteUser",
+        "operationId": "deleteUserWithRole",
         "tags": [
           "User Role"
         ],
@@ -1596,7 +1662,7 @@
     },
     "/roleView/role/{roleID}/view/{viewID}": {
       "get": {
-        "operationId": "getUser",
+        "operationId": "getUserWithRoleView",
         "tags": [
           "Role View"
         ],
@@ -1604,7 +1670,7 @@
         "description": "Esta operación permite listar un user role.",
         "parameters": [
           {
-            "name": "roleId",
+            "name": "roleID",
             "in": "path",
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "schema": {
@@ -1668,7 +1734,7 @@
         }
       },
       "delete": {
-        "operationId": "deleteUser",
+        "operationId": "deleteUserWithRoleView",
         "tags": [
           "Role View"
         ],
@@ -1676,7 +1742,7 @@
         "description": "Esta operación permite eliminar un user role.",
         "parameters": [
           {
-            "name": "roleId",
+            "name": "roleID",
             "in": "path",
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "schema": {
@@ -2547,7 +2613,6 @@
         ],
         "summary": "Property update",
         "description": "Esta operación permite actualizar un property.",
-
         "parameters": [
           {
             "name": "id",
@@ -3148,6 +3213,26 @@
   },
   "components": {
     "schemas": {
+      "login": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "string",
+            "example": "user",
+            "description": "Usuario o nick."
+          },
+          "email": {
+            "type": "string",
+            "example": "email@email.com",
+            "description": "Email del usuario"
+          },
+          "password": {
+            "type": "string",
+            "example": "password",
+            "description": "Password del usuario."
+          }
+        }
+      },
       "User": {
         "type": "object",
         "properties": {
@@ -3584,7 +3669,6 @@
           }
         }
       },
-
       "Module": {
         "type": "object",
         "properties": {
@@ -4019,17 +4103,17 @@
           },
           "length": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "length del property"
           },
           "width": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "width del property"
           },
           "area": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "area del property"
           },
           "floor": {
@@ -4109,17 +4193,17 @@
           },
           "length": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "length del property"
           },
           "width": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "width del property"
           },
           "area": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "area del property"
           },
           "floor": {
@@ -4205,17 +4289,17 @@
           },
           "length": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "length del property"
           },
           "width": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "width del property"
           },
           "area": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "area del property"
           },
           "floor": {
@@ -4286,6 +4370,16 @@
         "description": "Lista de properties.",
         "items": {
           "$ref": "#/components/schemas/Property"
+        }
+      },
+      "Token": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+            "description": "Token User."
+          }
         }
       },
       "IdOutput": {

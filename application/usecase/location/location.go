@@ -1,4 +1,4 @@
-package locationperson
+package location
 
 import (
 	"fmt"
@@ -7,15 +7,15 @@ import (
 	"github.com/google/uuid"
 )
 
-type LocationPerson struct {
-	storage locationperson.StorageLocationPerson
+type Location struct {
+	storage locationperson.StorageLocation
 }
 
-func New(storage locationperson.StorageLocationPerson) LocationPerson {
-	return LocationPerson{storage}
+func New(storage locationperson.StorageLocation) Location {
+	return Location{storage}
 }
 
-func (u LocationPerson) GetById(id uuid.UUID) (*model.Location, error) {
+func (u Location) GetById(id uuid.UUID) (*model.Location, error) {
 	user, err := u.storage.GetByIdStorage(id)
 	if err != nil {
 		return nil, fmt.Errorf("locationPerson.storage.GetById(): %w", err)
@@ -24,7 +24,7 @@ func (u LocationPerson) GetById(id uuid.UUID) (*model.Location, error) {
 	return user, nil
 }
 
-func (u LocationPerson) GetAll() (model.Locations, error) {
+func (u Location) GetAll() (model.Locations, error) {
 	users, err := u.storage.GetAllStorage()
 	if err != nil {
 		return nil, fmt.Errorf("locationPerson.storage.GetAll(): %w", err)
@@ -33,7 +33,7 @@ func (u LocationPerson) GetAll() (model.Locations, error) {
 	return users, nil
 }
 
-func (u LocationPerson) Create(user model.Location) (*model.CreateOutput, error) {
+func (u Location) Create(user model.Location) (*model.CreateOutput, error) {
 	id, err := u.storage.CreateStorage(user)
 	if err != nil {
 		return nil, fmt.Errorf("locationPerson.use.Create(): %w", err)
@@ -46,7 +46,7 @@ func (u LocationPerson) Create(user model.Location) (*model.CreateOutput, error)
 	return &m, nil
 }
 
-func (u LocationPerson) Update(id uuid.UUID, user model.Location) (*model.UpdateOutput, error) {
+func (u Location) Update(id uuid.UUID, user model.Location) (*model.UpdateOutput, error) {
 	created, err := u.storage.UpdateStorage(id, user)
 	if err != nil {
 		return nil, fmt.Errorf("locationPerson.storage.Update(): %w", err)
@@ -57,7 +57,7 @@ func (u LocationPerson) Update(id uuid.UUID, user model.Location) (*model.Update
 	return &m, nil
 }
 
-func (u LocationPerson) Delete(id uuid.UUID) (*model.DeleteOutput, error) {
+func (u Location) Delete(id uuid.UUID) (*model.DeleteOutput, error) {
 	deleted, err := u.storage.DeleteStorage(id)
 	if err != nil {
 		return nil, fmt.Errorf("locationPerson.storage.Delete(): %w", err)

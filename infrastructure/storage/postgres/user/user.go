@@ -15,24 +15,31 @@ const (
 
 var (
 	_psqlGetById = `SELECT u.id,
-       				u.user,
-       				u.password,
-       				u.email,
-       				u.theme,
-       				p.id,
-       				p.document_type,
-       				p.document,
-       				p.names,
-       				p.lastname,
-       				p.m_lastname,
-       				p.phone,
-       				p.gender,
-       				p.marital_status,
-       				p.address,
-       				p.date_birth,
-       				p.location_person_id
-				FROM domain.users u INNER JOIN domain.persons p ON p.id = u.person_id
-				WHERE u.id = $1`
+						u.user,
+						u.password,
+						u.email,
+						u.theme,
+						p.id,
+						p.document_type,
+						p.document,
+						p.names,
+						p.lastname,
+						p.m_lastname,
+						p.phone,
+						p.gender,
+						p.marital_status,
+						p.date_birth,
+						p.location_id
+					FROM domain.users u INNER JOIN domain.persons p ON p.id = u.person_id
+					WHERE u.id = $1`
+	_psqlGetByUsernameOrEmail = `SELECT id,
+									user,
+									password,
+									email,
+									theme,
+									person_id
+								From domain.users
+								WHERE "user" = $1 OR email = $2`
 	_psqlGetAll = `SELECT u.id,
 				       u.user,
 				       u.password,
@@ -47,9 +54,8 @@ var (
 				       p.phone,
 				       p.gender,
 				       p.marital_status,
-				       p.address,
 				       p.date_birth,
-				       p.location_person_id
+				       p.location_id
 				FROM domain.users u INNER JOIN domain.persons p ON p.id = u.person_id`
 	_psqlGetAllWithRoles = `SELECT u.id,
 								   u.user,
@@ -60,8 +66,8 @@ var (
 								   r.name,
 								   r.description,
 								   r."order"
-				FROM domain.users_roles ur INNER JOIN domain.users u ON u.id = ur.user_id
-                INNER JOIN domain.roles r ON ur.role_id = r.id`
+							FROM domain.users_roles ur INNER JOIN domain.users u ON u.id = ur.user_id
+							INNER JOIN domain.roles r ON ur.role_id = r.id`
 	_psqlInsert = `INSERT INTO domain.users (id, "user", "password", "email", "theme", "person_id") VALUES ($1, $2, $3, $4, $5, $6)`
 	_psqlUpdate = `UPDATE domain.users SET "user"=$2, "password"=$3, "email"=$4, "theme"=$5, "person_id"=$6 WHERE id=$1`
 	_psqlDelete = `DELETE FROM domain.users WHERE id=$1`
@@ -92,6 +98,23 @@ func (u User) GetByIdStorage(id uuid.UUID) (*model.UserOutput, error) {
 	return &m, nil
 }
 
+func (u User) GetByUsernameOrEmailStorage(username, email string) (*model.User, error) {
+	args := []any{username, email}
+
+	stmt, err := u.db.Prepare(_psqlGetByUsernameOrEmail)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	m, err := u.scanRow(stmt.QueryRow(args...))
+	if err != nil {
+		return nil, err
+	}
+
+	return &m, nil
+}
+
 func (u User) GetAllStorage() (model.UsersOutput, error) {
 	stmt, err := u.db.Prepare(_psqlGetAll)
 	if err != nil {
@@ -113,8 +136,10 @@ func (u User) GetAllStorage() (model.UsersOutput, error) {
 		if err != nil {
 			break
 		}
+		fmt.Println("model", m)
 		ms = append(ms, m)
 	}
+	fmt.Println("models", ms)
 
 	return ms, nil
 }
@@ -234,6 +259,7 @@ func (u User) scanRow(s pgx.Row) (model.User, error) {
 		&m.Password,
 		&m.Email,
 		&m.Theme,
+		&m.PersonID,
 	)
 	if err != nil {
 		return model.User{}, err

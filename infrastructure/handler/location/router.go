@@ -1,7 +1,7 @@
 package location
 
 import (
-	useCaseLocationPerson "github.com/Melany751/house-match-server/application/usecase/locationperson"
+	useCaseLocationPerson "github.com/Melany751/house-match-server/application/usecase/location"
 	"github.com/Melany751/house-match-server/domain/model"
 	storageLocationPerson "github.com/Melany751/house-match-server/infrastructure/storage/postgres/locationperson"
 	"github.com/gin-gonic/gin"
