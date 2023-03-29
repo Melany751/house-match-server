@@ -7,6 +7,7 @@ import (
 
 type StorageUser interface {
 	GetByIdStorage(id uuid.UUID) (*model.UserOutput, error)
+	GetByUsernameOrEmailStorage(username, email string) (*model.User, error)
 	GetAllStorage() (model.UsersOutput, error)
 	GetAllWithRolesStorage() (model.UsersWithRolesOutput, error)
 	CreateStorage(m model.User) (*uuid.UUID, error)

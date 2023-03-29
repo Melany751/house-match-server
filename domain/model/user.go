@@ -88,3 +88,9 @@ func (ur UsersWithRoles) GetUserWithRole() UsersWithRolesOutput {
 
 	return results
 }
+
+type Login struct {
+	User     string `json:"user"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}

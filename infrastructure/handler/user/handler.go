@@ -17,6 +17,22 @@ func newHandler(useCase user.UseCaseUser) handler {
 	return handler{useCase}
 }
 
+func (h handler) login(c *gin.Context) {
+	var req model.Login
+	if err := c.BindJSON(&req); err != nil {
+		c.JSON(response.BadRequest(model.ResponseError{Error: fmt.Sprintf("Error read body, error: %s", err.Error())}))
+		return
+	}
+
+	m, err := h.useCase.Login(req)
+	if err != nil {
+		c.JSON(response.Wrong(model.ResponseError{Error: err.Error()}))
+		return
+	}
+
+	c.JSON(response.OK(m))
+}
+
 func (h handler) getById(c *gin.Context) {
 	id := c.Param("id")
 	uid, err := uuid.Parse(id)

@@ -29,7 +29,7 @@ var (
 				       lp.city,
 				       lp.province,
 				       lp.district
-				FROM domain.persons p INNER JOIN domain.location_persons lp ON p.location_person_id = lp.id
+				FROM domain.persons p INNER JOIN domain.locations lp ON p.location_id = lp.id
 				WHERE p.id = $1;`
 	_psqlGetAll = `SELECT p.id,
 				       p.document_type,
@@ -46,9 +46,9 @@ var (
 				       lp.city,
 				       lp.province,
 				       lp.district
-				FROM domain.persons p INNER JOIN domain.location_persons lp ON p.location_person_id = lp.id;`
-	_psqlInsert = `INSERT INTO domain.persons (id, document_type, document, names, lastname, m_lastname, phone, gender, marital_status, date_birth,media_id, location_person_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`
-	_psqlUpdate = `UPDATE domain.persons SET "document_type"=$2, "document"=$3, "names"=$4, "lastname"=$5, "m_lastname"=$6, "phone"=$7, "gender"=$8, "marital_status"=$9, "address"=$10, "date_birth"=$11, "location_person_id"=$12 WHERE id=$1;`
+				FROM domain.persons p INNER JOIN domain.locations lp ON p.location_id = lp.id;`
+	_psqlInsert = `INSERT INTO domain.persons (id, document_type, document, names, lastname, m_lastname, phone, gender, marital_status, date_birth, photo, location_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`
+	_psqlUpdate = `UPDATE domain.persons SET "document_type"=$2, "document"=$3, "names"=$4, "lastname"=$5, "m_lastname"=$6, "phone"=$7, "gender"=$8, "marital_status"=$9, "address"=$10, "date_birth"=$11, "location_id"=$12 WHERE id=$1;`
 	_psqlDelete = `DELETE FROM domain.persons WHERE id=$1;`
 )
 
