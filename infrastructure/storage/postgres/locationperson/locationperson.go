@@ -161,6 +161,9 @@ func (u Location) scanRow(s pgx.Row) (model.Location, error) {
 		&m.City,
 		&m.Province,
 		&m.District,
+		&m.Address,
+		&m.Lat,
+		&m.Long,
 	)
 	if err != nil {
 		return model.Location{}, err
