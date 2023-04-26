@@ -34,14 +34,6 @@ create table domain.roles_views
     view_position varchar
 );
 
-create table domain.modules
-(
-    id          uuid default gen_random_uuid() not null primary key unique,
-    "name"      varchar                        not null,
-    description varchar,
-    icon        varchar                        not null,
-    "order"     int                            not null
-);
 
 create table domain.users_roles
 (
@@ -57,11 +49,6 @@ create table domain.medias
     url    varchar,
     "size" double precision,
     "type" varchar
-    id   uuid default gen_random_uuid() not null primary key,
-    name varchar                        not null,
-    url  varchar,
-    size double precision,
-    type varchar
 );
 
 create table domain.properties
@@ -153,41 +140,6 @@ create table domain.users_roles
     role_id uuid not null
         constraint users_roles_roles_id_fk
             references domain.roles
-);
-
-create table domain.properties_medias
-(
-    property_id uuid not null,
-    media_id    uuid not null
-        constraint properties_medias_medias_id_fk
-            references domain.medias
-);
-
-create table domain.properties
-(
-    id               uuid default gen_random_uuid() not null
-        primary key,
-    user_id          uuid                           not null
-        constraint properties_users_id_fk
-            references domain.users,
-    location_id      uuid
-        constraint properties_location_id_fk
-            references domain.locations,
-    description      varchar,
-    "type"           varchar                        not null,
-    "length"         double precision,
-    width            double precision,
-    area             double precision,
-    floor            integer                        not null,
-    number_of_floors integer,
-    rooms            integer,
-    bathrooms        integer,
-    yard             integer,
-    terrace          integer,
-    living_room      integer,
-    laundry_room     integer,
-    kitchen          integer,
-    garage           integer
 );
 
 create table domain.transactions

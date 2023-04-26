@@ -16,6 +16,7 @@ const (
 var (
 	_psqlGetById = `SELECT 
     				p.id,
+    				p.location_id,
     				p.description,
     				p.type,
     				p.length,
@@ -35,11 +36,13 @@ var (
     				u.user, 
     				u.password, 
     				u.email, 
-    				u.theme
+    				u.theme,
+    				u.person_id
 					FROM domain.properties p INNER JOIN domain.users u ON p.user_id=u.id
 					WHERE p.id = $1`
 	_psqlGetAll = `SELECT 
     				p.id,
+    				p.location_id,
     				p.description,
     				p.type,
     				p.length,
@@ -59,7 +62,8 @@ var (
     				u.user, 
     				u.password, 
     				u.email, 
-    				u.theme FROM domain.properties p INNER JOIN domain.users u ON p.user_id=u.id`
+    				u.theme,
+    				u.person_id FROM domain.properties p INNER JOIN domain.users u ON p.user_id=u.id`
 	_psqlInsertProperty      = `INSERT INTO domain.properties (id, "user_id","location_id", "description", "type", "length","width","area","floor","number_of_floors","rooms","bathrooms","yard","terrace","living_room","laundry_room","kitchen","garage") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`
 	_psqlInsertLocation      = `INSERT INTO domain.locations (id, country, city, province, district, address, lat, long) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`
 	_psqlInsertPropertyMedia = `INSERT INTO domain.properties_medias ("property_id","media_id") VALUES ($1, $2)`
@@ -449,6 +453,7 @@ func (p Property) scanRowWithUser(s pgx.Row) (model.PropertySecondLevel, error) 
 	m := model.PropertySecondLevel{}
 	err := s.Scan(
 		&m.ID,
+		&m.LocationID,
 		&m.Description,
 		&m.Type,
 		&m.Length,
@@ -469,6 +474,7 @@ func (p Property) scanRowWithUser(s pgx.Row) (model.PropertySecondLevel, error) 
 		&m.User.Password,
 		&m.User.Email,
 		&m.User.Theme,
+		&m.User.PersonID,
 	)
 	if err != nil {
 		return model.PropertySecondLevel{}, err
