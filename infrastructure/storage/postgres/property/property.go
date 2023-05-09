@@ -14,9 +14,50 @@ const (
 )
 
 var (
-	_psqlGetById = `SELECT 
+	_psqlGetById = `SELECT p.id,
+						   l.id,
+						   l.country,
+						   l.city,
+						   l.province,
+						   l.district,
+						   l.address,
+						   l.lat,
+						   l.long,
+						   p.description,
+						   p.type,
+						   p.length,
+						   p.width,
+						   p.area,
+						   p.floor,
+						   p.number_of_floors,
+						   p.rooms,
+						   p.bathrooms,
+						   p.yard,
+						   p.terrace,
+						   p.living_room,
+						   p.laundry_room,
+						   p.kitchen,
+						   p.garage,
+						   u.id,
+						   u.user,
+						   u.password,
+						   u.email,
+						   u.theme,
+						   u.person_id
+					FROM domain.properties p
+							 INNER JOIN domain.users u ON p.user_id = u.id
+							 INNER JOIN domain.locations l on l.id = p.location_id
+					WHERE p.id = $1`
+	_psqlGetByUserId = `SELECT 
     				p.id,
-    				p.location_id,
+    				l.id,
+				    l.country,
+				    l.city,
+				    l.province,
+				    l.district,
+				    l.address,
+				    l.lat,
+				    l.long,
     				p.description,
     				p.type,
     				p.length,
@@ -37,12 +78,21 @@ var (
     				u.password, 
     				u.email, 
     				u.theme,
-    				u.person_id
-					FROM domain.properties p INNER JOIN domain.users u ON p.user_id=u.id
-					WHERE p.id = $1`
+    				u.person_id 
+					FROM domain.properties p 
+    				    INNER JOIN domain.users u ON p.user_id=u.id
+    				    INNER JOIN domain.locations l on l.id = p.location_id
+    				    WHERE p.user_id=$1`
 	_psqlGetAll = `SELECT 
     				p.id,
-    				p.location_id,
+    				l.id,
+				    l.country,
+				    l.city,
+				    l.province,
+				    l.district,
+				    l.address,
+				    l.lat,
+				    l.long,
     				p.description,
     				p.type,
     				p.length,
@@ -63,7 +113,10 @@ var (
     				u.password, 
     				u.email, 
     				u.theme,
-    				u.person_id FROM domain.properties p INNER JOIN domain.users u ON p.user_id=u.id`
+    				u.person_id 
+					FROM domain.properties p 
+    				    INNER JOIN domain.users u ON p.user_id=u.id
+    				    INNER JOIN domain.locations l on l.id = p.location_id`
 	_psqlInsertProperty      = `INSERT INTO domain.properties (id, "user_id","location_id", "description", "type", "length","width","area","floor","number_of_floors","rooms","bathrooms","yard","terrace","living_room","laundry_room","kitchen","garage") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`
 	_psqlInsertLocation      = `INSERT INTO domain.locations (id, country, city, province, district, address, lat, long) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);`
 	_psqlInsertPropertyMedia = `INSERT INTO domain.properties_medias ("property_id","media_id") VALUES ($1, $2)`
@@ -106,6 +159,35 @@ func (p Property) GetStorageAll() (model.PropertiesSecondLevel, error) {
 	defer stmt.Close()
 
 	rows, err := stmt.Query()
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var ms model.PropertiesSecondLevel
+	var m model.PropertySecondLevel
+
+	for rows.Next() {
+		m, err = p.scanRowWithUser(rows)
+		if err != nil {
+			break
+		}
+		ms = append(ms, m)
+	}
+
+	return ms, nil
+}
+
+func (p Property) GetStorageByUserId(id uuid.UUID) (model.PropertiesSecondLevel, error) {
+	args := []any{id}
+
+	stmt, err := p.db.Prepare(_psqlGetByUserId)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(args...)
 	if err != nil {
 		return nil, err
 	}
@@ -453,7 +535,14 @@ func (p Property) scanRowWithUser(s pgx.Row) (model.PropertySecondLevel, error) 
 	m := model.PropertySecondLevel{}
 	err := s.Scan(
 		&m.ID,
-		&m.LocationID,
+		&m.Location.ID,
+		&m.Location.Country,
+		&m.Location.City,
+		&m.Location.Province,
+		&m.Location.District,
+		&m.Location.Address,
+		&m.Location.Lat,
+		&m.Location.Long,
 		&m.Description,
 		&m.Type,
 		&m.Length,

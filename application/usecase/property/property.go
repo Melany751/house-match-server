@@ -33,6 +33,15 @@ func (p Property) GetAll() (model.PropertiesSecondLevel, error) {
 	return properties, nil
 }
 
+func (p Property) GetByUserId(id uuid.UUID) (model.PropertiesSecondLevel, error) {
+	properties, err := p.storage.GetStorageByUserId(id)
+	if err != nil {
+		return nil, fmt.Errorf("property.storage.GetAll(): %w", err)
+	}
+
+	return properties, nil
+}
+
 func (p Property) Create(property model.Property) (*model.CreateOutput, error) {
 	id, err := p.storage.CreateStorage(property)
 	if err != nil {

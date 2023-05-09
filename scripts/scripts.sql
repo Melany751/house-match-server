@@ -142,20 +142,20 @@ create table domain.users_roles
             references domain.roles
 );
 
+create type type_transaction_enum as enum('ALQUILER', 'VENTA', 'ANTICRESIS');
+drop table if exists domain.transactions;
 create table domain.transactions
 (
-    id          uuid default gen_random_uuid() not null
-        primary key,
-    property_id uuid                           not null
-        constraint transactions_properties_id_fk
-            references domain.properties,
-    "cost"      double precision               not null,
+    id          uuid default gen_random_uuid() not null primary key,
+    property_id uuid                           not null constraint transactions_properties_id_fk
+        references domain.properties,
+    "cost"        double precision               not null,
     currency    varchar                        not null,
     date_vip    timestamp,
     date_post   timestamp,
     date_update timestamp,
     available   boolean                        not null,
-    "type"      varchar,
+    "type"        type_transaction_enum,
     date_start  timestamp,
     date_end    timestamp
 );

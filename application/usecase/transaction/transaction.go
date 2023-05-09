@@ -17,21 +17,39 @@ func New(storage transaction.StorageTransaction) Transaction {
 }
 
 func (r Transaction) GetById(id uuid.UUID) (*model.TransactionSecondLevel, error) {
-	transaction, err := r.storage.GetStorageById(id)
+	m, err := r.storage.GetStorageById(id)
 	if err != nil {
-		return nil, fmt.Errorf("transaction.storage.GetById(): %w", err)
+		return nil, fmt.Errorf("m.storage.GetById(): %w", err)
 	}
 
-	return transaction, nil
+	return m, nil
+}
+
+func (r Transaction) GetByUserId(id uuid.UUID) (model.TransactionsSecondLevel, error) {
+	m, err := r.storage.GetStorageByUserId(id)
+	if err != nil {
+		return nil, fmt.Errorf("m.storage.GetById(): %w", err)
+	}
+
+	return m, nil
+}
+
+func (r Transaction) GetAllByFilters(params map[string]string) (model.TransactionsThirdLevel, error) {
+	ms, err := r.storage.GetStorageAllByFilters(params)
+	if err != nil {
+		return nil, fmt.Errorf("m.storage.GetAllByFilters(): %w", err)
+	}
+
+	return ms, nil
 }
 
 func (r Transaction) GetAll() (model.TransactionsSecondLevel, error) {
-	transactions, err := r.storage.GetStorageAll()
+	ms, err := r.storage.GetStorageAll()
 	if err != nil {
 		return nil, fmt.Errorf("transaction.storage.GetAll(): %w", err)
 	}
 
-	return transactions, nil
+	return ms, nil
 }
 
 func (r Transaction) Create(transaction model.Transaction) (*model.CreateOutput, error) {

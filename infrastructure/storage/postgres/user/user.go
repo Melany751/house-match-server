@@ -81,7 +81,7 @@ func New(db *sql.DB) User {
 	return User{db}
 }
 
-func (u User) GetByIdStorage(id uuid.UUID) (*model.UserOutput, error) {
+func (u User) GetByIdStorage(id uuid.UUID) (*model.UserSecondLevel, error) {
 	args := []any{id}
 
 	stmt, err := u.db.Prepare(_psqlGetById)
@@ -115,7 +115,7 @@ func (u User) GetByUsernameOrEmailStorage(username, email string) (*model.User, 
 	return &m, nil
 }
 
-func (u User) GetAllStorage() (model.UsersOutput, error) {
+func (u User) GetAllStorage() (model.UsersSecondLevel, error) {
 	stmt, err := u.db.Prepare(_psqlGetAll)
 	if err != nil {
 		return nil, err
@@ -128,8 +128,8 @@ func (u User) GetAllStorage() (model.UsersOutput, error) {
 	}
 	defer rows.Close()
 
-	var ms model.UsersOutput
-	var m model.UserOutput
+	var ms model.UsersSecondLevel
+	var m model.UserSecondLevel
 
 	for rows.Next() {
 		m, err = u.scanRowWithPerson(rows)
@@ -268,8 +268,8 @@ func (u User) scanRow(s pgx.Row) (model.User, error) {
 	return m, nil
 }
 
-func (u User) scanRowWithPerson(s pgx.Row) (model.UserOutput, error) {
-	m := model.UserOutput{}
+func (u User) scanRowWithPerson(s pgx.Row) (model.UserSecondLevel, error) {
+	m := model.UserSecondLevel{}
 
 	err := s.Scan(
 		&m.ID,
@@ -290,7 +290,7 @@ func (u User) scanRowWithPerson(s pgx.Row) (model.UserOutput, error) {
 		&m.Person.LocationID,
 	)
 	if err != nil {
-		return model.UserOutput{}, err
+		return model.UserSecondLevel{}, err
 	}
 
 	return m, nil

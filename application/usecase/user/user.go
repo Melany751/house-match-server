@@ -16,7 +16,7 @@ func New(storage user.StorageUser) User {
 	return User{storage}
 }
 
-func (u User) GetById(id uuid.UUID) (*model.UserOutput, error) {
+func (u User) GetById(id uuid.UUID) (*model.UserSecondLevel, error) {
 	m, err := u.storage.GetByIdStorage(id)
 	if err != nil {
 		return nil, fmt.Errorf("user.storage.GetById(): %w", err)
@@ -25,7 +25,7 @@ func (u User) GetById(id uuid.UUID) (*model.UserOutput, error) {
 	return m, nil
 }
 
-func (u User) GetAll() (model.UsersOutput, error) {
+func (u User) GetAll() (model.UsersSecondLevel, error) {
 	users, err := u.storage.GetAllStorage()
 	if err != nil {
 		return nil, fmt.Errorf("user.storage.GetAll(): %w", err)

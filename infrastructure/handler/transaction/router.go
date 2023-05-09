@@ -23,8 +23,10 @@ func publicRoutes(api *gin.Engine, h handler, middlewares ...gin.HandlerFunc) {
 	routes := api.Group("v1/transactions", middlewares...)
 
 	routes.GET("/:id", h.getById)
-	routes.GET("", h.getAll)
+	//routes.GET("", h.getAll)
+	routes.GET("", h.getAllByFilters)
 	routes.POST("", h.create)
 	routes.PUT("/:id", h.update)
 	routes.DELETE("/:id", h.delete)
+	routes.GET("/user/:id", h.getByUserId)
 }

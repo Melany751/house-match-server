@@ -15,7 +15,7 @@ type User struct {
 
 type Users []User
 
-type UserOutput struct {
+type UserSecondLevel struct {
 	ID       uuid.UUID `json:"id"`
 	User     string    `json:"user"`
 	Password string    `json:"password"`
@@ -24,7 +24,7 @@ type UserOutput struct {
 	Person   Person    `json:"person"`
 }
 
-type UsersOutput []UserOutput
+type UsersSecondLevel []UserSecondLevel
 
 type UserWithRolesOutput struct {
 	ID       uuid.UUID `json:"id"`

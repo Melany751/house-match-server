@@ -958,7 +958,7 @@
     },
     "/userRole/user/{userId}/role/{roleId}": {
       "get": {
-        "operationId": "getUser",
+        "operationId": "getUserRole",
         "tags": [
           "User Role"
         ],
@@ -1030,7 +1030,7 @@
         }
       },
       "post": {
-        "operationId": "assignmentUser",
+        "operationId": "postUserRole",
         "tags": [
           "User Role"
         ],
@@ -1102,7 +1102,7 @@
         }
       },
       "delete": {
-        "operationId": "deleteUser",
+        "operationId": "deleteUserRole",
         "tags": [
           "User Role"
         ],
@@ -1662,7 +1662,7 @@
     },
     "/roleView/role/{roleID}/view/{viewID}": {
       "get": {
-        "operationId": "getUser",
+        "operationId": "getRoleViewDetail",
         "tags": [
           "Role View"
         ],
@@ -1670,7 +1670,7 @@
         "description": "Esta operación permite listar un user role.",
         "parameters": [
           {
-            "name": "roleId",
+            "name": "roleID",
             "in": "path",
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "schema": {
@@ -1734,7 +1734,7 @@
         }
       },
       "delete": {
-        "operationId": "deleteUser",
+        "operationId": "deleteRoleViewDetail",
         "tags": [
           "Role View"
         ],
@@ -1742,7 +1742,7 @@
         "description": "Esta operación permite eliminar un user role.",
         "parameters": [
           {
-            "name": "roleId",
+            "name": "roleID",
             "in": "path",
             "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
             "schema": {
@@ -2444,7 +2444,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Properties"
+                  "$ref": "#/components/schemas/PropertiesSecondLevel"
                 }
               }
             }
@@ -2569,7 +2569,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Property"
+                  "$ref": "#/components/schemas/PropertySecondLevel"
                 }
               }
             }
@@ -2613,7 +2613,6 @@
         ],
         "summary": "Property update",
         "description": "Esta operación permite actualizar un property.",
-
         "parameters": [
           {
             "name": "id",
@@ -2862,6 +2861,70 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BoolOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/properties/user/{id}": {
+      "get": {
+        "operationId": "getPropertyUserId",
+        "tags": [
+          "Properties"
+        ],
+        "summary": "Property list",
+        "description": "Esta operación permite listar un property.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PropertiesSecondLevel"
                 }
               }
             }
@@ -3219,13 +3282,125 @@
         ],
         "summary": "Transaction list",
         "description": "Esta operación permite listar todos los transactions.",
+        "parameters": [
+          {
+            "name": "typeProperty",
+            "in": "query",
+            "example": "type",
+            "description": "Tipo de propiedad",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rooms",
+            "in": "query",
+            "example": 1,
+            "description": "numero de habitaciones",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "bathrooms",
+            "in": "query",
+            "example": 1,
+            "description": "numero de bathrooms",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "minArea",
+            "in": "query",
+            "example": 0,
+            "description": "minimo de area",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "maxArea",
+            "in": "query",
+            "example": 110,
+            "description": "maximo de area",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "typeTransaction",
+            "in": "query",
+            "example": "ALQUILER",
+            "description": "Tipo de transaccion",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "maxCost",
+            "in": "query",
+            "example": "type",
+            "description": "maximo costo",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "minCost",
+            "in": "query",
+            "example": "type",
+            "description": "minimo costo",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "example": "country",
+            "description": "pais",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "province",
+            "in": "query",
+            "example": "province",
+            "description": "provincia",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "district",
+            "in": "query",
+            "example": "district",
+            "description": "distrito",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TransactionsSecondLevel"
+                  "$ref": "#/components/schemas/TransactionsThirdLevel"
                 }
               }
             }
@@ -3486,6 +3661,70 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/BoolOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "BAD_REQUEST",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "UNPROCESSABLE_ENTITY",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntity"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "INTERNAL_SERVER_ERROR",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnexpectedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/user/{id}": {
+      "get": {
+        "operationId": "getTransactionByUser",
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Transaction list",
+        "description": "Esta operación permite listar Transactiones por usuario.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionsSecondLevel"
                 }
               }
             }
@@ -3982,7 +4221,6 @@
           }
         }
       },
-
       "Module": {
         "type": "object",
         "properties": {
@@ -4417,17 +4655,208 @@
           },
           "length": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "length del property"
           },
           "width": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "width del property"
           },
           "area": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
+            "description": "area del property"
+          },
+          "floor": {
+            "type": "integer",
+            "example": 1,
+            "description": "floor del property"
+          },
+          "number_of_floor": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of floors del property"
+          },
+          "rooms": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of rooms del property"
+          },
+          "bathrooms": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of bathrooms del property"
+          },
+          "yard": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of yard del property"
+          },
+          "terrace": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of terrace del property"
+          },
+          "living_room": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of living_room del property"
+          },
+          "laundry_room": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of laundry_room del property"
+          },
+          "kitchen": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of kitchen del property"
+          },
+          "garage": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of garage del property"
+          }
+        }
+      },
+      "PropertySecondLevel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del property."
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "description": {
+            "type": "string",
+            "example": "description",
+            "description": "description del property."
+          },
+          "type": {
+            "type": "string",
+            "example": "type",
+            "description": "type del property"
+          },
+          "length": {
+            "type": "number",
+            "example": 1,
+            "description": "length del property"
+          },
+          "width": {
+            "type": "number",
+            "example": 1,
+            "description": "width del property"
+          },
+          "area": {
+            "type": "number",
+            "example": 1,
+            "description": "area del property"
+          },
+          "floor": {
+            "type": "integer",
+            "example": 1,
+            "description": "floor del property"
+          },
+          "number_of_floor": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of floors del property"
+          },
+          "rooms": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of rooms del property"
+          },
+          "bathrooms": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of bathrooms del property"
+          },
+          "yard": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of yard del property"
+          },
+          "terrace": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of terrace del property"
+          },
+          "living_room": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of living_room del property"
+          },
+          "laundry_room": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of laundry_room del property"
+          },
+          "kitchen": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of kitchen del property"
+          },
+          "garage": {
+            "type": "integer",
+            "example": 1,
+            "description": "number of garage del property"
+          }
+        }
+      },
+      "PropertiesSecondLevel": {
+        "type": "array",
+        "description": "Lista de Propiedades.",
+        "items": {
+          "$ref": "#/components/schemas/PropertySecondLevel"
+        }
+      },
+      "PropertyWithoutUserSecondLevel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del property."
+          },
+          "user_id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del usuario."
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "description": {
+            "type": "string",
+            "example": "description",
+            "description": "description del property."
+          },
+          "type": {
+            "type": "string",
+            "example": "type",
+            "description": "type del property"
+          },
+          "length": {
+            "type": "number",
+            "example": 1,
+            "description": "length del property"
+          },
+          "width": {
+            "type": "number",
+            "example": 1,
+            "description": "width del property"
+          },
+          "area": {
+            "type": "number",
+            "example": 1,
             "description": "area del property"
           },
           "floor": {
@@ -4507,17 +4936,17 @@
           },
           "length": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "length del property"
           },
           "width": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "width del property"
           },
           "area": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "area del property"
           },
           "floor": {
@@ -4603,17 +5032,17 @@
           },
           "length": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "length del property"
           },
           "width": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "width del property"
           },
           "area": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "area del property"
           },
           "floor": {
@@ -4709,7 +5138,65 @@
           },
           "cost": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
+            "description": "cost del transaction."
+          },
+          "currency": {
+            "type": "string",
+            "example": "soles",
+            "description": "currency del transaction."
+          },
+          "date_vip": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_vip del transaction"
+          },
+          "date_post": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_post del transaction"
+          },
+          "date_update": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_update del transaction"
+          },
+          "available": {
+            "type": "boolean",
+            "example": true,
+            "description": "available del transaction"
+          },
+          "type": {
+            "type": "string",
+            "example": "casa",
+            "description": "type del transaction"
+          },
+          "date_start": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_start del transaction"
+          },
+          "date_end": {
+            "type": "string",
+            "example": "2023-02-19T06:46:57+00:00",
+            "description": "date_end del transaction"
+          }
+        }
+      },
+      "TransactionThirdLevel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "29995f0a-44c1-4a89-91e4-8529927957d9",
+            "description": "id del transaction."
+          },
+          "property": {
+            "$ref": "#/components/schemas/PropertyWithoutUserSecondLevel"
+          },
+          "cost": {
+            "type": "number",
+            "example": 1,
             "description": "cost del transaction."
           },
           "currency": {
@@ -4764,7 +5251,7 @@
           },
           "cost": {
             "type": "number",
-            "example": 1.0,
+            "example": 1,
             "description": "cost del transaction."
           },
           "currency": {
@@ -4814,6 +5301,13 @@
         "description": "Lista de transactions.",
         "items": {
           "$ref": "#/components/schemas/TransactionSecondLevel"
+        }
+      },
+      "TransactionsThirdLevel": {
+        "type": "array",
+        "description": "Lista de transactions.",
+        "items": {
+          "$ref": "#/components/schemas/TransactionThirdLevel"
         }
       },
       "IdOutput": {
